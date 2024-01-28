@@ -1,0 +1,30 @@
+[  
+    {    
+    "id": 1,    
+    "nome": "Jane Doe",    
+	  "foto": [     
+	    "assets/img/team1.jpg"    
+	            ],
+    "descricao": "Some text that describes me lorem ipsum ipsum lorem.",
+    "link": "https://digital.ceuvago.com/"
+  },
+	{    
+    "id": 2,    
+    "nome": "Mike Ross",    
+	  "foto": [     
+	    "assets/img/team2.jpg"    
+	            ],
+    "descricao": "Some text that describes me lorem ipsum ipsum lorem.",
+    "link": "https://digital.ceuvago.com/"
+  },
+  
+  {
+    "id": 3,    
+    "nome": "John Doe",    
+	  "foto": [     
+	    "assets/img/team3.jpg"    
+	            ],
+    "descricao": "Some text that describes me lorem ipsum ipsum lorem.",
+    "link": "https://digital.ceuvago.com/"
+  }
+]

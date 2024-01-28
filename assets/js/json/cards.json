@@ -1,0 +1,26 @@
+[  
+    {    "id": 0,    "titulo": "WebAuth-Autenticador biométrico",    
+	"imagens": [     
+	"img/1.png"    
+	],
+    "descricao": "O WebAuthn é um padrão web para autenticação segura na Web. Se autentique com um dispositivo em vez de uma senha.",
+    "link": "https://digital.ceuvago.com/"
+  },
+	{    "id": 1,    "titulo": "Lotofácil conferidor",    
+	"imagens": [     
+	"img/2.png"    
+	],
+    "descricao": "Um siste para conferir resultados da lotofácil, com a possibilidade de gerar jogos com fechamento",
+    "link": "https://lotofacil.ceuvago.com"
+  },
+  
+  {
+    "id": 3,
+    "titulo": "Gerador de Código",
+    "imagens": [
+        "img/3.png"
+    ],
+    "descricao": "Um gerador de código CRUD MVC em PHP, o gerador criar os script básicos para criar, ler editar e excluir dados do banco de dados.",
+    "link": "https://phpcrud.ceuvago.com/"
+  }
+]
