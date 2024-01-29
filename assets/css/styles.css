@@ -503,7 +503,7 @@ a {
 }
 .toggle-switch {
     position: relative;
-    width: 90px;
+    width: 110px;
     display: inline-block;
     text-align: left;
     margin: 10px;
@@ -536,28 +536,28 @@ a {
       width: 50%;
       margin-left: -150px;
       padding: 0;
-      color: white;
+      color: rgba(255, 255, 255, 0);
       font-weight: bold;
     }
     &:before{
         width: 50%;
         margin-left: 100px;
         padding: 0;
-        color: white;
+        color: rgba(255, 255, 255, 0);
         font-weight: bold;
       }
   
     &:before {
       content: "Desktop";
       padding-left: 10px;
-      background-color: #60a917;
-      color: #FFFFFF;
+      background-color: #60a91700;
+      color: #ffffff;
     }
   
     &:after {
       content: "Mobile";
       padding-right: 10px;
-      background-color: #60a917;
+      background-color: #60a91700;
       color: #FFFFFF;
       text-align: right;
     }
@@ -567,12 +567,12 @@ a {
     display: block;
     width: 18px;
     margin: 5px;
-    background: #FFFFFF;
+    background: #ffffff00;
     position: absolute;
     top: 0;
     bottom: 0;
     right: 56px;
-    border: 2px solid #999999;
+    border: 2px solid #99999900;
     border-radius: 20px;
     transition: all 0.3s ease-in 0s;
   }

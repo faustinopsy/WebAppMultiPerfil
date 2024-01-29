@@ -44,14 +44,13 @@ export default class HeatmapComponent {
     
 
     displayHeatmap(data, container, isMobile) {
-        //if (!this.heatmapInstance) {
             this.heatmapInstance = h337.create({
                 container: container,
                 backgroundColor: 'rgba(0,0,0,.95)',
                 maxOpacity: .9,
                 minOpacity: .01
             });
-       // }
+       
     
         const filteredData = data.filter(item => String(item.isMobile) === String(isMobile));
         console.log(filteredData)
@@ -77,7 +76,8 @@ export default class HeatmapComponent {
     render() {
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main';
-
+        mainDiv.classList.add = 'container';
+        mainDiv.style.height='600px';
         const toggleSwitchDiv = document.createElement('div');
         toggleSwitchDiv.className = 'toggle-switch';
 

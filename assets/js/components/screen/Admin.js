@@ -6,8 +6,8 @@ export default class Admin {
         this.menuItems = [
             { href: "permissoes", icon: "assets/img/permiss.png", text: "PERFIL", id: "1-0" },
             { href: "usuarios", icon: "assets/img/users.png", text: "USERS", id: "1-1" },
-            { href: "gerirprodutos", icon: "assets/img/cad.png", text: "CADASTRAR", id: "0-2" },
-            { href: "experiencia", icon: "assets/img/combina.png", text: "COMBINACAO", id: "0-2" },
+            { href: "gerirprodutos", icon: "assets/img/cad.png", text: "PRODUTOS", id: "0-2" },
+            { href: "experiencia", icon: "assets/img/combina.png", text: "EXPERIENCIA", id: "0-2" },
         ];
         this.userLanguage = lang; 
         this.loadLanguage();
