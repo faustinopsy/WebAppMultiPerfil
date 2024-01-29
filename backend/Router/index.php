@@ -9,8 +9,10 @@ $router = new Router();
 require __DIR__ . '/Usuarios.php';
 require __DIR__ . '/Perfis.php';
 require __DIR__ . '/Permissoes.php';
+require __DIR__ . '/PerfilPermissoes.php';
 require __DIR__ . '/Token.php';
-require __DIR__ . '/Produtos.php'; 
+require __DIR__ . '/Saloes.php'; 
+require __DIR__ . '/Enderecos.php'; 
 require __DIR__ . '/Analiticos.php';
 
 header('Content-Type: application/json');
@@ -49,7 +51,9 @@ addTokenRoutes($router);
 addUsuarioRoutes($router);
 addPerfilRoutes($router);
 addPermissaoRoutes($router);
-addProdutoRoutes($router);
+addAssociarRoutes($router);
+addSaloesRoutes($router);
+addEnderecosRoutes($router);
 addAnaliticosRoutes($router);
 
 $router->run();

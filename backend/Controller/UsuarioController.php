@@ -104,28 +104,53 @@ class UsuarioController extends Crud{
     }
     
     public function listarUsuarios(){
-        return $this->select($this->usuarios,[]);
+        $resultadon = $this->select($this->usuarios,[]);
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Não existe dados a retornar.'];
+        }else{
+            return $resultadon;
+        }
     }
     
     public function buscarPorEmail(string $email){
         $condicoes = ['email' => $email];
         $resultados = $this->select($this->usuarios, $condicoes);
-        return count($resultados) > 0 ? $resultados[0] : null;
+        $resultadon = count($resultados) > 0 ? $resultados[0] : false;
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Não existe dados a retornar.'];
+        }else{
+            return $resultadon;
+        }
     }
     public function bloquearPorEmail(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        return  $this->update($this->usuarios, $condicoes);
+        $resultado = $this->update($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return ['status' => true, 'message' => 'BLoqueado com sucesso.'];
+        }
         
     }
     public function buscarPorId(int $id){
         $condicoes = ['id' => $id];
         $resultados = $this->select($this->usuarios, $condicoes);
-        return count($resultados) > 0 ? $resultados[0] : null;
+        $resultadon = count($resultados) > 0 ? $resultados[0] : null;
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return $resultadon;
+        }
     }
     
     public function removerUsuario(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        return $this->delete($this->usuarios, $condicoes);
+        $resultado = $this->delete($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Não pode excluir.'];
+        }else{
+            return ['status' => true, 'message' => 'Excluido com sucesso.'];
+        }
     }
     public function gerarStringAlfanumerica($tamanho) {
         $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

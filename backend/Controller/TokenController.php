@@ -3,7 +3,7 @@
 namespace App\Controller;
 use App\Model\Usuarios;
 
-class UsuarioPermissaoController {
+class TokenController {
 
     private $ips_permitidos;
     private $origesPermitidas;

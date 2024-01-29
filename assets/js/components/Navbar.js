@@ -4,7 +4,7 @@ export default class Navbar {
         this.menuItems = [
             { text: 'admin', icon: "assets/img/admin.png"},
             { text: 'sobre', icon: "assets/img/about.png" },
-            { text: 'produtos', icon: "assets/img/home.png"},
+            { text: 'saloes', icon: "assets/img/home.png"},
             { text: 'login', icon: "assets/img/login.png" },
             { text: 'usuarios', icon: "assets/img/users.png" },
         ];

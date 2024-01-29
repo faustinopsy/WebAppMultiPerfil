@@ -1,6 +1,6 @@
 import BuscaApi from '../lib/BuscaApiG.js';
 
-export default class ListaProdutos {
+export default class ListaSaloes {
     constructor() {
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
         this.appElement = document.getElementById('app');
@@ -8,29 +8,28 @@ export default class ListaProdutos {
     }
 
     async init() {
-        await this.buscaProdutos();
+        await this.buscaSaloes();
     }
 
-    async buscaProdutos() {
+    async buscaSaloes() {
         try {
-            const data = await this.buscaApi.fetchApi(`Produtos`, 'GET');
-            this.renderProdutos(data.Produtos);
+            const data = await this.buscaApi.fetchApi(`Saloes`, 'GET');
+            this.renderSaloes(data);
         } catch (error) {
             console.error(error);
         }
     }
     
-    renderProdutos(produtos) {
+    renderSaloes(saloes) {
         const divUser = document.querySelector('.main');
 
-        produtos.forEach(produto => {
+        saloes.forEach(salao => {
             const container = document.createElement("div");
             container.classList.add("w3-card-4");
             container.innerHTML = `
                 <div class="w3-container">
-                    <h3>Nome: ${produto.nome}</h3>
+                    <h3>Nome: ${salao.nome}</h3>
                     <img src="assets/img/combina.png" alt="Produto">
-                    <p>Preço: ${produto.preco}</p>
                 </div> 
             `;
             
@@ -50,8 +49,8 @@ export default class ListaProdutos {
         };
     }
 }
-const produtos = new ListaProdutos();
-produtos.render();
-produtos.init();
+const saloes = new ListaSaloes();
+saloes.render();
+saloes.init();
 
 

@@ -50,10 +50,10 @@ export default class GerenciadorPermissoes {
     }
     
     async getPermissoes(perfilId) {
-        return await this.buscaApi.fetchApi(`Perfil/${perfilId}`, 'GET');
+        return await this.buscaApi.fetchApi(`Associar/${perfilId}`, 'GET');
     }
-    async addPermissao(perfilId, permissaoId) {
-        const result = await this.buscaApi.fetchApi('Permissoes/Perfil', 'POST', { perfilId, permissao_id: permissaoId });
+    async addAssociarPermissao(perfilId, permissaoId) {
+        const result = await this.buscaApi.fetchApi('Associar', 'POST', { perfilId, permissao_id: permissaoId });
         if (result.status) {
             alert('Associação realizada com sucesso!');
         } else {
@@ -62,20 +62,18 @@ export default class GerenciadorPermissoes {
         return result;
     }
     
-    async deletePermissao(perfilId, permissaoId) {
-        return await this.buscaApi.fetchApi(`Permissoes/${perfilId}`, 'DELETE', { permissao_id: permissaoId });
+    async deleteAssociarPermissao(perfilId, permissaoId) {
+        return await this.buscaApi.fetchApi(`Associar/${perfilId}`, 'DELETE', { permissao_id: permissaoId });
     }
         
     async populatePerfis() {
         const perfis = await this.getPerfis();
-        const ul = document.getElementById('perfilList');
+       
         const select = document.getElementById('perfilSelect');
         const permissoesList = document.getElementById('permissoesList');
     
         perfis.forEach(perfil => {
-            const li = document.createElement('li');
-            li.textContent = perfil.nome;
-            ul.appendChild(li);
+           
     
             const option = document.createElement('option');
             option.value = perfil.id;
@@ -104,7 +102,7 @@ export default class GerenciadorPermissoes {
                         removeBtn.textContent = "Remover";
                         removeBtn.classList.add("w3-button", "w3-round", "w3-border");
                         removeBtn.addEventListener('click', async () => {
-                            const result = await this.deletePermissao(perfilId, permissao.id);
+                            const result = await this.deleteAssociarPermissao(perfilId, permissao.id);
                             if (result.status) {
                                 alert('Permissão removida com sucesso!');
                                 li.remove(); 
@@ -141,16 +139,16 @@ export default class GerenciadorPermissoes {
 
     bindEvents() {
         this.addPerfilModal = document.getElementById('addPerfilModal');
-    this.addPermissaoModal = document.getElementById('addPermissaoModal');
+        this.addPermissaoModal = document.getElementById('addPermissaoModal');
     
-    this.novoPerfilNome = document.getElementById('novoPerfilNome');
-    this.novaPermissaoNome = document.getElementById('novaPermissaoNome');
+        this.novoPerfilNome = document.getElementById('novoPerfilNome');
+        this.novaPermissaoNome = document.getElementById('novaPermissaoNome');
 
-    const addPerfilBtn = document.getElementById('addPerfilNova');
-    const addPermissaoBtn = document.getElementById('addPermissaoNova');
+        const addPerfilBtn = document.getElementById('addPerfilNova');
+        const addPermissaoBtn = document.getElementById('addPermissaoNova');
 
-    const savePerfilBtn = document.getElementById('savePerfilBtn'); 
-    const savePermissaoBtn = document.getElementById('savePermissaoBtn'); 
+        const savePerfilBtn = document.getElementById('savePerfilBtn'); 
+        const savePermissaoBtn = document.getElementById('savePermissaoBtn'); 
 
     addPerfilBtn.addEventListener('click', () => {
         this.addPerfilModal.style.display = 'block';
@@ -175,7 +173,7 @@ export default class GerenciadorPermissoes {
                 alert('Selecione um perfil e uma permissão')
                 return;
             }
-            await this.addPermissao(perfilId, permissaoId);
+            await this.addAssociarPermissao(perfilId, permissaoId);
         });
         
         document.getElementById('perfilSelect').addEventListener('change', async (event) => {
@@ -206,8 +204,6 @@ export default class GerenciadorPermissoes {
         permissaoCard.classList.add('w3-margin-bottom');
         permissaoCard.innerHTML = `
             <h2>Gerenciar Permissões</h2>
-            <h2>Perfis</h2>
-            <ul id="perfilList"></ul>
             <label for="perfilSelect">Perfil:</label>
             <select id="perfilSelect" class="w3-select" required>
                 <option value="">Selecione</option>
@@ -218,7 +214,7 @@ export default class GerenciadorPermissoes {
             <select id="permissaoSelect" class="w3-select" required>
                 <option value="">Selecione</option>
             </select>
-            <button id="addPermissaoNova" class="w3-btn w3-tiny w3-border w3-border-green">+</button>
+                <button id="addPermissaoNova" class="w3-btn w3-tiny w3-border w3-border-green">+</button>
             <br>
             <button id="addPermissaoBtn" class="w3-button w3-round w3-border w3-border-green">Associar Permissão e Perfil</button>
             

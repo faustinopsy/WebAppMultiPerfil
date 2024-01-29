@@ -2,11 +2,11 @@
 
 namespace App\Model;
 
-class Produtos {
+class Saloes {
     private int $id;
     private string $nome;
-    private string $preco;
-    private int $quantidade;
+    private int $idusuario;
+    private int $idendereco;
     private int $ativo;
 
     public function __construct()
@@ -33,30 +33,35 @@ class Produtos {
 
         return $this;
     }
-    public function getPreco(): string
+    
+    public function getIdusuario(): int
     {
-        return $this->preco;
+        return $this->idusuario;
     }
-    public function setPreco(string $preco): self
+    public function setIdusuario(int $idusuario): self
     {
-        $this->preco = $preco;
+        $this->idusuario = $idusuario;
 
         return $this;
     }
-    public function getQuantidade(): int
+    public function getIdendereco(): int
     {
-        return $this->quantidade;
+        return $this->idendereco;
     }
-    public function setQuantidade(int $quantidade): self
+    public function setIdendereco(int $idendereco): self
     {
-        $this->quantidade = $quantidade;
+        $this->idendereco = $idendereco;
 
         return $this;
     }
+
+    
     public function getAtivo(): int
     {
         return $this->ativo;
     }
+
+    
     public function setAtivo(int $ativo): self
     {
         $this->ativo = $ativo;

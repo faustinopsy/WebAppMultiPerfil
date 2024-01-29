@@ -3,12 +3,12 @@ namespace App\Router;
 
 use App\Controller\UsuarioController;
 use App\Model\Usuarios;
-use App\Controller\UsuarioPermissaoController;
+use App\Controller\TokenController;
 
 function addUsuarioRoutes($router) {
     $router->mount('/Usuarios', function () use ($router) {
         $router->get('/', function () {
-            $permitido = new UsuarioPermissaoController();
+            $permitido = new TokenController();
             $permitido->autorizado();
             $usuario = new Usuarios();
             $usuariosController = new UsuarioController($usuario);
@@ -24,7 +24,7 @@ function addUsuarioRoutes($router) {
         });
 
         $router->get('/(\d+)', function ($id) {
-            $permitido = new UsuarioPermissaoController();
+            $permitido = new TokenController();
             $permitido->autorizado();
             $usuario = new Usuarios();
             $usuariosController = new UsuarioController($usuario);
@@ -39,7 +39,7 @@ function addUsuarioRoutes($router) {
         });
 
         $router->put('/', function () {
-            $permitido = new UsuarioPermissaoController();
+            $permitido = new TokenController();
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
@@ -98,7 +98,7 @@ function addUsuarioRoutes($router) {
             }
         });
         $router->delete('/', function () {
-            $permitido = new UsuarioPermissaoController();
+            $permitido = new TokenController();
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();

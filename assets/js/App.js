@@ -4,10 +4,10 @@ import LoginScreen from './components/screen/LoginScreen.js';
 import GerenciadorPermissoes from './components/list/GerenciadorPermissoes.js';
 import RegistrationScreen from './components/screen/RegistrationScreen.js';
 import RecoveryScreen from './components/screen/RecoveryScreen.js';
-import ListaProdutos from './components/list/ListaProdutos.js';
+import ListaSaloes from './components/list/ListaSaloes.js';
 import Admin from './components/screen/Admin.js';
 import About from './components/screen/About.js';
-import GerenciadorProdutos from './components/list/GerenciadorProdutos.js';
+import GerenciadorSaloes from './components/list/GerenciadorSaloes.js';
 import HeatmapComponent from './components/lib/HeatmapComponent.js';
 
 class App {
@@ -67,11 +67,11 @@ getComponentInstance(link) {
                 case 'sobre':
                     return new About(this.userLanguage);
                    
-                case 'produtos':
-                    return new ListaProdutos();
+                case 'saloes':
+                    return new ListaSaloes();
 
-                case 'gerirprodutos':
-                    return new GerenciadorProdutos();
+                case 'gerirsaloes':
+                    return new GerenciadorSaloes();
                    
                 case 'login':
                     return new LoginScreen(this.navigate.bind(this));
