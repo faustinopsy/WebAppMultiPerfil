@@ -9,6 +9,8 @@ import Admin from './components/screen/Admin.js';
 import About from './components/screen/About.js';
 import GerenciadorSaloes from './components/list/GerenciadorSaloes.js';
 import HeatmapComponent from './components/lib/HeatmapComponent.js';
+import CadSaloes from './components/cad/CadSaloes.js';
+import CadEnderecos from './components/cad/CadEnderecos.js';
 
 class App {
     constructor() {
@@ -18,7 +20,7 @@ class App {
         this.tokenJWT.init();
     }
 
-navigate(link) {
+navigate(link, params = {}) {
     if (this.appElement) {
         this.appElement.innerHTML = '';
     } else {
@@ -26,7 +28,7 @@ navigate(link) {
     }
     
 
-    let componentInstance =  this.getComponentInstance(link);
+    let componentInstance =  this.getComponentInstance(link, params);
     
 
     if (componentInstance) {
@@ -46,7 +48,7 @@ addPopStateListener() {
 }
 
 
-getComponentInstance(link) {
+getComponentInstance(link, params) {
   
             switch (link) {
                 case 'usuarios':
@@ -71,13 +73,19 @@ getComponentInstance(link) {
                     return new ListaSaloes();
 
                 case 'gerirsaloes':
-                    return new GerenciadorSaloes();
+                    return new GerenciadorSaloes(this.navigate.bind(this));
                    
                 case 'login':
                     return new LoginScreen(this.navigate.bind(this));
                 
                 case 'experiencia':
                     return new HeatmapComponent();
+                
+                case 'cadsalao':
+                    return new CadSaloes(this.navigate.bind(this));
+                    
+                case 'cadendereco':
+                        return new CadEnderecos(this.navigate.bind(this),params);
                     
                 default:
                     return null;

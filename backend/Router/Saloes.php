@@ -13,7 +13,16 @@ function addSaloesRoutes($router) {
             $resultado = $saloesController->listarSalao(); 
             echo json_encode($resultado);
         });
-
+        $router->get('/MeuSalao', function () {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $iduser= $permitido->verIdUserToken();
+            $saloes = new Saloes();
+            $saloes->setIdusuario($iduser);
+            $saloesController = new SaloesController($saloes);
+            $resultado = $saloesController->listarMeuSalao(); 
+            echo json_encode($resultado);
+        });
         $router->get('/(\d+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
@@ -25,13 +34,16 @@ function addSaloesRoutes($router) {
         $router->post('/', function () {
             $permitido = new TokenController();
             $permitido->autorizado();
+            $iduser= $permitido->verIdUserToken();
             $body = json_decode(file_get_contents('php://input'), true);
             $saloes = new Saloes();
-            $saloes->setNome($body['nome']);
-            
+            $saloes->setNome($body['titulo']);
+            $saloes->setServicos($body['servicos']);
+            $saloes->setIdusuario($iduser);
+            $saloes->setAtivo(1);
             $saloesController = new SaloesController($saloes);
             $resultado = $saloesController->adicionarSalao();
-            echo json_encode(['status' => $resultado]);
+            echo json_encode($resultado);
         });
         $router->delete('/', function () {
             $permitido = new TokenController();

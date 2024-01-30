@@ -12,6 +12,7 @@ class Enderecos {
     private string $latitude;
     private string $longitude;
     private int $idusuario;
+    private int $idsalao;
 
     public function __construct()
     {
@@ -104,6 +105,16 @@ class Enderecos {
     public function setIdusuario(int $idusuario): self
     {
         $this->idusuario = $idusuario;
+
+        return $this;
+    }
+    public function getSalao(): int
+    {
+        return $this->idsalao;
+    }
+    public function setSalao(int $idsalao): self
+    {
+        $this->idsalao = $idsalao;
 
         return $this;
     }

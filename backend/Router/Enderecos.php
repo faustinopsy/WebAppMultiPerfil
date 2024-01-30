@@ -47,10 +47,11 @@ function addEnderecosRoutes($router) {
             $enderecos->setEstado($body['estado']);
             $enderecos->setLatitude($body['latitude']);
             $enderecos->setLongitude($body['longitude']);
+            $enderecos->setSalao($body['idSalao']);
             $enderecos->setIdusuario($iduser);
             $EnderecosController = new EnderecosController($enderecos);
             $resultado = $EnderecosController->adicionarEndereco();
-            echo json_encode(['status' => $resultado]);
+            echo json_encode($resultado);
         });
         $router->delete('/', function () {
             $permitido = new TokenController();

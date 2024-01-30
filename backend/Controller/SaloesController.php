@@ -17,7 +17,8 @@ class SaloesController extends Crud{
         $resultado=$this->select($this->saloes,['nome'=> $this->saloes->getNome()]);
         if(!$resultado){
             $this->insert($this->saloes);
-            return ['status' => true, 'message' => 'Inserido com sucesso.'];
+            $idSalao = $this->getLastInsertId();
+            return ['status' => true, 'message' => 'Inserido com sucesso.', 'idSalao'=> $idSalao ];
         }
         return ['status' => false, 'message' => 'Salão já existe.'];
     }
@@ -25,13 +26,19 @@ class SaloesController extends Crud{
     public function listarSalao(){
         $resultado = $this->select($this->saloes,[]);
         if(!$resultado){
-            http_response_code(204);
-            return ["status" => false, "Saloes" => $resultado,"mensagem"=>"nenhum resultado encontrado"];
+            return $resultado;
         }else{
             return $resultado;
         }
     }
-    
+    public function listarMeuSalao(){
+        $resultado = $this->select($this->saloes,['idusuario'=>$this->saloes->getIdusuario()]);
+        if(!$resultado){
+            return $resultado;
+        }else{
+            return $resultado;
+        }
+    }
     public function buscarPorId(int $id){
         $condicoes = ['id' => $id];
         $resultados = $this->select($this->saloes, $condicoes);

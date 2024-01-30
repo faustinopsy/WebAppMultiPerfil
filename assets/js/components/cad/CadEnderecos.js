@@ -1,8 +1,11 @@
 import BuscaApi from '../lib/BuscaApiG.js';
-
+import Mensagem from '../lib/Mensagens.js';
 export default class CadEnderecos {
-    constructor() {
+    constructor(navigateCallback,params) {
+        this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
+        this.idSalao = params;
+        this.mensagem = new Mensagem();
     }
     async init() {
         await this.buscaEnderecos();
@@ -47,6 +50,7 @@ export default class CadEnderecos {
 
             if (data.status) {
                 this.displayMessage('Endereço registrado com sucesso!');
+                this.navigate('gerirsaloes');
             } else {
                 this.displayMessage('Erro ao registrar o Endereço.');
             }
@@ -70,10 +74,9 @@ export default class CadEnderecos {
 
         registrationContainer.innerHTML = `
         <div class="w3-container">
-      
         <div id="id01" class="w3-modal" style="display:block">
           <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
-            <form class="w3-container" id="enderecoForm">
+            <form class="w3-container w3-row-padding"" id="enderecoForm">
                 <div class="w3-section">
                 <label for="cep">CEP</label>
                 <input class="w3-input w3-border w3-margin-bottom" type="text" name="cep" id="cep" placeholder="Insira o CEP" required />
@@ -86,23 +89,28 @@ export default class CadEnderecos {
                     <label for="bairro">Bairro</label>
                     <input class="w3-input w3-border w3-margin-bottom" type="text" name="bairro" id="bairro" placeholder="Insira o Bairro" required />
                 </div>
-                <div class="w3-section">
+                <div class="w3-row-padding">
+                    <div class="w3-half">
                     <label for="cidade">Cidade</label>
                     <input class="w3-input w3-border w3-margin-bottom" type="text" name="cidade" id="cidade" placeholder="Insira a Cidade" required />
                 </div>
-                <div class="w3-section">
+                    <div class="w3-half">
                     <label for="estado">Estado</label>
                     <input class="w3-input w3-border w3-margin-bottom" type="text" name="estado" id="estado" placeholder="Insira o Estado" required />
                 </div>
-                <div class="w3-section">
-                    <label for="latitude">Latitude</label>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" name="latitude" id="latitude" placeholder="Insira a Latitude" />
                 </div>
-                <div class="w3-section">
-                    <label for="longitude">Longitude</label>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" name="longitude" id="longitude" placeholder="Insira a Longitude" />
-                </div>
-                <button type="submit" class="w3-button w3-block w3-green w3-section w3-padding">Cadastrar</button>
+                <div class="w3-row-padding">
+                    <div class="w3-half">
+                        <label>Latitude</label>
+                        <input class="w3-input w3-border " type="text" name="latitude" id="latitude" placeholder="Insira a Latitude" />
+                    </div>
+                    <div class="w3-half">
+                        <label>Longitude</label>
+                        <input class="w3-input w3-border " type="text" name="longitude" id="longitude" placeholder="Insira a Longitude" />
+                    </div>
+                    </div>
+                    <button id="cancelar" class="w3-button  w3-red w3-section w3-padding">Cancelar</button>
+                    <button type="submit" class="w3-button  w3-green w3-section w3-padding">Cadastrar</button>
                 <p id="message"></p>
             </form>
            
@@ -110,11 +118,12 @@ export default class CadEnderecos {
             </div>
             </div>
         `;
-
+        registrationContainer.querySelector('#cancelar').addEventListener('click', async (e) => {
+            this.navigate('gerirsaloes');
+        });
         registrationContainer.querySelector('#cep').addEventListener('blur', async (event) => {
             event.preventDefault();
            this.buscaCep(event.target.value);
-           
         });
         registrationContainer.querySelector('#enderecoForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -134,7 +143,11 @@ export default class CadEnderecos {
                 return;
             }
             
-            await this.cadastrar(endereco);
+            endereco.idSalao = this.idSalao
+            const isConfirmed = await this.mensagem.confirmAction('create');
+                    if (isConfirmed) {
+                        await this.cadastrar(endereco);
+                    }
         });
 
         
@@ -146,7 +159,7 @@ export default class CadEnderecos {
     }
 }
 
-const enderecos = new CadEnderecos();
-const renderedElement = enderecos.render();
-enderecos.init();
-document.body.appendChild(renderedElement.element);
+// const enderecos = new CadEnderecos();
+// const renderedElement = enderecos.render();
+// enderecos.init();
+// document.body.appendChild(renderedElement.element);

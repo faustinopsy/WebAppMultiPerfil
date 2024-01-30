@@ -5,6 +5,7 @@ export default class Navbar {
             { text: 'admin', icon: "assets/img/admin.png"},
             { text: 'sobre', icon: "assets/img/about.png" },
             { text: 'saloes', icon: "assets/img/home.png"},
+            { text: 'gerirsaloes', icon: "assets/img/salon.png"},
             { text: 'login', icon: "assets/img/login.png" },
             { text: 'usuarios', icon: "assets/img/users.png" },
         ];

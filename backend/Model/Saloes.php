@@ -6,7 +6,7 @@ class Saloes {
     private int $id;
     private string $nome;
     private int $idusuario;
-    private int $idendereco;
+    private string $servicos;
     private int $ativo;
 
     public function __construct()
@@ -44,24 +44,22 @@ class Saloes {
 
         return $this;
     }
-    public function getIdendereco(): int
+    public function getServicos(): string
     {
-        return $this->idendereco;
+        return $this->servicos;
     }
-    public function setIdendereco(int $idendereco): self
+    public function setServicos(string $servicos): self
     {
-        $this->idendereco = $idendereco;
+        $this->servicos = $servicos;
 
         return $this;
     }
 
-    
     public function getAtivo(): int
     {
         return $this->ativo;
     }
 
-    
     public function setAtivo(int $ativo): self
     {
         $this->ativo = $ativo;

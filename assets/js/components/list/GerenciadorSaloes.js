@@ -1,8 +1,11 @@
 import BuscaApi from '../lib/BuscaApiG.js';
+import Mensagem from '../lib/Mensagens.js';
 
 export default class GerenciadorSaloes {
-    constructor() {
+    constructor(navigateCallback) {
+        this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
+        this.mensagem = new Mensagem();
     }
 
     async init() {
@@ -15,7 +18,7 @@ export default class GerenciadorSaloes {
 
     async buscaSaloes() {
         try {
-            const data = await this.buscaApi.fetchApi(`Saloes`, 'GET');
+            const data = await this.buscaApi.fetchApi(`Saloes/MeuSalao`, 'GET');
             this.renderSaloes(data);
         } catch (error) {
             console.error(error);
@@ -23,37 +26,63 @@ export default class GerenciadorSaloes {
         }
     }
     
-    renderSaloes(saloes) {
+    renderSaloes(saloes='') {
         const divUser = document.querySelector('.main');
-
-        saloes.forEach(salao => {
-            const container = document.createElement("div");
-            container.classList.add("w3-card-4");
-            container.innerHTML = `
-                <div class="w3-container">
-                    <h3>Dados no banco</h3>
-                    <p>Id: ${salao.id}</p>
-                    <h3>Nome: ${salao.nome}</h3>
-                </div>
-                
-            `;
-
-            const removeBtn = document.createElement('button');
-            removeBtn.textContent = "Remover";
-            removeBtn.classList.add("w3-button", "w3-border", "w3-hover-black");
-            removeBtn.addEventListener('click', async () => {
-                const result = await this.deleteSaloes(salao.id);
-                if (result.status) {
-                    alert('Salao removido com sucesso!');
-                    container.remove();
-                } else {
-                    alert('Erro ao remover usuário.');
-                }
-            });
-            container.appendChild(removeBtn);
-            
-            divUser.appendChild(container);
+        const container1 = document.createElement("div");
+        const salaoBtn = document.createElement('button');
+        salaoBtn.textContent = "Cadastrar salão";
+        salaoBtn.classList.add("w3-button", "w3-border","w3-green", "w3-hover-black");
+        salaoBtn.addEventListener('click', async () => {
+            this.navigate('cadsalao');
         });
+        if(saloes.length<1){
+            container1.appendChild(salaoBtn);
+            divUser.appendChild(container1);
+        }
+        
+        if(saloes!=''){
+            saloes.forEach(salao => {
+                const container = document.createElement("div");
+                container.classList.add("w3-card-4");
+                container.innerHTML = `
+                    <div class="w3-container">
+                        <h3>Meu Salão</h3>
+                        <p hidden>Id: ${salao.id}</p>
+                        <h3>Nome: ${salao.nome}</h3>
+                    </div>
+                    
+                `;
+                const idSalao = salao.id;
+                const enderecoBtn = document.createElement('button');
+                enderecoBtn.textContent = "Cadastrar Endereço";
+                enderecoBtn.classList.add("w3-button","w3-green", "w3-border", "w3-hover-black");
+                enderecoBtn.addEventListener('click', async () => {
+                    this.navigate('cadendereco',  idSalao );
+                });
+                container.appendChild(enderecoBtn);
+    
+    
+                const removeBtn = document.createElement('button');
+                removeBtn.textContent = "Remover Salão";
+                removeBtn.classList.add("w3-button","w3-red", "w3-border", "w3-hover-black");
+                removeBtn.addEventListener('click', async () => {
+                    const isConfirmed = await this.mensagem.confirmAction('delete');
+                    if (isConfirmed) {
+                        const result = await this.deleteSaloes(salao.id);
+                        if (result) {
+                            Swal.fire("Excluído!", "O salão foi excluído com sucesso.", "success");
+                            container.remove();
+                            container1.appendChild(salaoBtn);
+                            divUser.appendChild(container1);
+                        }
+                    }
+                });
+                container.appendChild(removeBtn);
+                
+                divUser.appendChild(container);
+            });
+        }
+        
     }
 
     render() {
