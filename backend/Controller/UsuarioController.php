@@ -22,14 +22,28 @@ class UsuarioController extends Crud{
         $this->PerfilPermissoes = new PerfilPermissoes();
         $this->permissoes = new Permissoes();
     }
-    
-    public function validarToken($token){
-        
+    public function idUser($token){
+       
         $key = TOKEN;
         $algoritimo = 'HS256';
         try {
             $decoded = JWT::decode($token, new Key($key, $algoritimo));
+            return $decoded->sub;
+        } catch(Exception $e) {
+            return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
+        }
+    }
+    public function validarToken($token){
+        $key = TOKEN;
+        $algoritimo = 'HS256';
+        try {
+            $decoded = JWT::decode($token, new Key($key, $algoritimo));
+            $condicoes = ['id' => $decoded->sub];
+            $resultado = $this->select($this->usuarios, $condicoes);
             $permissoes = $decoded->telas;
+            if(!$resultado){
+                return ['status' => false, 'message' => 'Token inválido! Motivo: usuário invalido'];
+            }
             if($_SERVER['SERVER_NAME']==$decoded->aud){
                 return ['status' => true, 'message' => 'Token válido!', 'telas'=>$permissoes];
             }else{
@@ -70,7 +84,7 @@ class UsuarioController extends Crud{
                 "aud" =>  $nome,
                 "iat" => time(),
                 "exp" => time() + (60 * $checado),  
-                "sub" => $this->usuarios->getEmail(),
+                "sub" => $resultado[0]['id'],
                 'telas'=>$permissoesNomes
             ];
             

@@ -6,12 +6,12 @@ class Enderecos {
     private int $id;
     private string $cep;
     private string $rua;
-    private int $bairro;
-    private int $cidade;
-    private int $estado;
-    private int $latitude;
-    private int $longitude;
-    private int $ativo;
+    private string $bairro;
+    private string $cidade;
+    private string $estado;
+    private string $latitude;
+    private string $longitude;
+    private int $idusuario;
 
     public function __construct()
     {
@@ -47,63 +47,63 @@ class Enderecos {
 
         return $this;
     }
-    public function getBairro(): int
+    public function getBairro(): string
     {
         return $this->bairro;
     }
-    public function setBairro(int $bairro): self
+    public function setBairro(string $bairro): self
     {
         $this->bairro = $bairro;
 
         return $this;
     }
-    public function getCidade(): int
+    public function getCidade(): string
     {
         return $this->cidade;
     }
-    public function setCidade(int $cidade): self
+    public function setCidade(string $cidade): self
     {
         $this->cidade = $cidade;
 
         return $this;
     }
-    public function getEstado(): int
+    public function getEstado(): string
     {
         return $this->estado;
     }
-    public function setEstado(int $estado): self
+    public function setEstado(string $estado): self
     {
         $this->estado = $estado;
 
         return $this;
     }
-    public function getLatitude(): int
+    public function getLatitude(): string
     {
         return $this->latitude;
     }
-    public function setLatitude(int $latitude): self
+    public function setLatitude(string $latitude): self
     {
         $this->latitude = $latitude;
 
         return $this;
     }
-    public function getLongitude(): int
+    public function getLongitude(): string
     {
         return $this->longitude;
     }
-    public function setLongitude(int $longitude): self
+    public function setLongitude(string $longitude): self
     {
         $this->longitude = $longitude;
 
         return $this;
     }
-    public function getAtivo(): int
+    public function getIdusuario(): int
     {
-        return $this->ativo;
+        return $this->idusuario;
     }
-    public function setAtivo(int $ativo): self
+    public function setIdusuario(int $idusuario): self
     {
-        $this->ativo = $ativo;
+        $this->idusuario = $idusuario;
 
         return $this;
     }

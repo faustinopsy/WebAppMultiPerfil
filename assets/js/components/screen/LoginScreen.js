@@ -10,6 +10,7 @@ export default class LoginScreen {
         try {
             const data = await this.buscaApi.fetchApi('Usuarios/login', 'POST', { email, senha: password, lembrar });
             if (data.status) {
+                console.log(data)
                 sessionStorage.setItem('token', data.token);
                 this.navigate('admin'); 
                 location.reload();

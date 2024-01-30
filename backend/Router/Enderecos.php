@@ -37,11 +37,18 @@ function addEnderecosRoutes($router) {
         $router->post('/', function () {
             $permitido = new TokenController();
             $permitido->autorizado();
+            $iduser= $permitido->verIdUserToken();
             $body = json_decode(file_get_contents('php://input'), true);
-            $Enderecos = new Enderecos();
-            $Enderecos->setRua($body['nome']);
-            
-            $EnderecosController = new EnderecosController($Enderecos);
+            $enderecos = new Enderecos();
+            $enderecos->setRua($body['rua']);
+            $enderecos->setCep($body['cep']);
+            $enderecos->setBairro($body['bairro']);
+            $enderecos->setCidade($body['cidade']);
+            $enderecos->setEstado($body['estado']);
+            $enderecos->setLatitude($body['latitude']);
+            $enderecos->setLongitude($body['longitude']);
+            $enderecos->setIdusuario($iduser);
+            $EnderecosController = new EnderecosController($enderecos);
             $resultado = $EnderecosController->adicionarEndereco();
             echo json_encode(['status' => $resultado]);
         });

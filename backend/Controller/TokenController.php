@@ -34,6 +34,13 @@ class TokenController {
             exit;
         }
     }
+    public function verIdUserToken(){
+        $usuario = new Usuarios();
+        $headers = getallheaders();
+        $token = $headers['Authorization'] ?? null;
+        $usuariosController = new UsuarioController($usuario);
+        return $usuariosController->idUser($token);
+    }
     public function Token(){
         $usuario = new Usuarios();
         $headers = getallheaders();
