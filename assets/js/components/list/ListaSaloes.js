@@ -22,14 +22,15 @@ export default class ListaSaloes {
     
     renderSaloes(saloes) {
         const divUser = document.querySelector('.main');
-
+        console.log(saloes)
         saloes.forEach(salao => {
             const container = document.createElement("div");
             container.classList.add("w3-card-4");
             container.innerHTML = `
                 <div class="w3-container">
-                    <h3>Nome: ${salao.nome}</h3>
-                    <img src="assets/img/combina.png" alt="Produto">
+                    <h3>Salão: ${salao.nome}</h3>
+                    <p>Serviços: ${salao.nome}</p>
+                    <img src="assets/img/salao.png" style="width: 150px" alt="Produto">
                 </div> 
             `;
             

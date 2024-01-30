@@ -18,6 +18,12 @@ function addSaloesRoutes($router) {
             $permitido->autorizado();
             $iduser= $permitido->verIdUserToken();
             $saloes = new Saloes();
+            if($iduser===1){
+                $saloesController = new SaloesController($saloes);
+                $resultado = $saloesController->listarSalao(); 
+                echo json_encode($resultado);
+                exit;
+            }
             $saloes->setIdusuario($iduser);
             $saloesController = new SaloesController($saloes);
             $resultado = $saloesController->listarMeuSalao(); 
