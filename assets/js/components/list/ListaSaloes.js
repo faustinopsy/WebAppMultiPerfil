@@ -60,12 +60,17 @@ export default class ListaSaloes {
     }
 
     render() {
+        document.getElementById('titulo').innerHTML='Busca de salões';
+        this.appElement.innerHTML='';
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main';
-
-        const searchDiv = document.getElementById('busca')
+        
+        const searchDiv = document.createElement('div');
+        searchDiv.innerHTML='';
+        searchDiv.className = 'w3-container';
         const inputBairro = document.createElement('input');
-        inputBairro.classList = "w3-input";
+        inputBairro.className = "w3-input";
+        inputBairro.classList.add("w3-border");
         inputBairro.type = 'text';
         inputBairro.placeholder = 'Digite o bairro...';
         inputBairro.id = 'inputBairro';
@@ -81,8 +86,7 @@ export default class ListaSaloes {
 
         searchDiv.appendChild(inputBairro);
         searchDiv.appendChild(searchButton);
-        
-
+        mainDiv.appendChild(searchDiv);
         this.appElement.appendChild(mainDiv);
         return {
             element: mainDiv,
