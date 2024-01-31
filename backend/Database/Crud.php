@@ -39,31 +39,66 @@ class Crud extends Connection{
     }
     }
     public function select($object, $conditions = []) {
-    try{
-        $reflectionClass = new \ReflectionClass($object);
-        $table=strtolower($reflectionClass->getShortName());
-        $query = "SELECT * FROM $table";
-        if (!empty($conditions)) {
-            $conditionsStr = implode(" AND ", array_map(function($item) {
-            return "$item = :$item";
-            }, array_keys($conditions)));
-            $query .= " WHERE $conditionsStr";
+        try {
+            $reflectionClass = new \ReflectionClass($object);
+            $table = strtolower($reflectionClass->getShortName());
+            $query = "SELECT * FROM $table";
+    
+            $conditionStrings = [];
+    
+            foreach ($conditions as $key => $condition) {
+                if (is_array($condition) && count($condition) == 2) {
+                    $operator = strtoupper($condition[0]);
+                    
+                    switch ($operator) {
+                        case 'LIKE':
+                            $conditionStrings[] = "$key LIKE :$key";
+                            break;
+                        case 'BETWEEN':
+                            if (is_array($condition[1]) && count($condition[1]) == 2) {
+                                $conditionStrings[] = "$key BETWEEN :${key}_min AND :${key}_max";
+                            }
+                            break;
+                    }
+                } else {
+                    
+                    $conditionStrings[] = "$key = :$key";
+                }
+            }
+    
+            if (!empty($conditionStrings)) {
+                $query .= " WHERE " . implode(" AND ", $conditionStrings);
+            }
+    
+            $stmt = $this->conn->prepare($query);
+    
+            foreach ($conditions as $key => $condition) {
+                if (is_array($condition) && count($condition) == 2) {
+                    $operator = strtoupper($condition[0]);
+                    
+                    switch ($operator) {
+                        case 'LIKE':
+                            $stmt->bindValue(":$key", $condition[1]);
+                            break;
+                        case 'BETWEEN':
+                            if (is_array($condition[1]) && count($condition[1]) == 2) {
+                                $stmt->bindValue(":${key}_min", $condition[1][0]);
+                                $stmt->bindValue(":${key}_max", $condition[1][1]);
+                            }
+                            break;
+                    }
+                } else {
+                    $stmt->bindValue(":$key", $condition);
+                }
+            }
+    
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $exception) {
+            echo "error: " . $exception->getMessage();
         }
-        $stmt = $this->conn->prepare($query);
-        foreach ($conditions as $key => $value) {
-            if ($key === 'id') {
-                $stmt->bindValue(":$key", $value);
-            }else{
-                $stmt->bindValue(":$key", $value);
-            } 
-        }
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }catch (Exception $exception) {
-        echo "error: " . $exception->getMessage();
-
     }
-    }
+    
     
     public function update($object, $conditions) {
         try {
