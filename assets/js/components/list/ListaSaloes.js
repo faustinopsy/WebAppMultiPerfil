@@ -37,9 +37,8 @@ export default class ListaSaloes {
             }
     }
     
-    renderSaloes(saloes) {
+    renderSaloes(salao2) {
         const divUser = document.querySelector('.main');
-        saloes.forEach(salao2 => {
             salao2.forEach(salao => {
                 const container = document.createElement("div");
                 container.classList.add("w3-card");
@@ -55,7 +54,7 @@ export default class ListaSaloes {
                 
                 divUser.appendChild(container);
             });
-        });
+       
         this.appElement.appendChild(divUser);
     }
 
@@ -97,8 +96,5 @@ export default class ListaSaloes {
         };
     }
 }
-const saloes = new ListaSaloes();
-saloes.render();
-saloes.init();
 
 

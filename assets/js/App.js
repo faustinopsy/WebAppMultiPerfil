@@ -11,6 +11,7 @@ import GerenciadorSaloes from './components/list/GerenciadorSaloes.js';
 import HeatmapComponent from './components/lib/HeatmapComponent.js';
 import CadSaloes from './components/cad/CadSaloes.js';
 import CadEnderecos from './components/cad/CadEnderecos.js';
+import MapaSaloes from './components/screen/MapaSaloes.js';
 
 class App {
     constructor() {
@@ -86,7 +87,10 @@ getComponentInstance(link, params) {
                     
                 case 'cadendereco':
                         return new CadEnderecos(this.navigate.bind(this),params);
-                    
+
+                case 'mapa':
+                    return new MapaSaloes();
+
                 default:
                     return null;
                     
@@ -97,5 +101,6 @@ getComponentInstance(link, params) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new App();
+   const app = new App();
+   app.navigate('mapa')
 });

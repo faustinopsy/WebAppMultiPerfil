@@ -31,18 +31,27 @@ class EnderecosController extends Crud{
              return  $dados ;
         }
     }
-    public function listarEnderecoGEO($latMin,$latMax,$longMin,$longMax){
-         $conditions = ['latitude' => ['BETWEEN', [$latMin, $latMax]]];
-        $resultadon = $this->select($this->enderecos,$conditions);
-        if(!$resultadon){
+    public function listarEnderecoGEO($latMin, $latMax, $longMin, $longMax) {
+        $conditions = ['latitude' => ['BETWEEN', [$latMin, $latMax]]];
+        $resultadoEnderecos = $this->select($this->enderecos, $conditions);
+    
+        if (!$resultadoEnderecos) {
             return ['status' => false, 'message' => 'Não existe dados a retornar.'];
-        }else{
-            foreach($resultadon as $key => $value) {
-                $dados[] = $this->select($this->saloes,['id'=> $value['idsalao']]);
-             }
-             return $dados;
+        } else {
+            $dados = [];
+            foreach ($resultadoEnderecos as $endereco) {
+                $detalhesSalao = $this->select($this->saloes, ['id' => $endereco['idsalao']]);
+                $detalheSalao = $detalhesSalao[0] ?? null;
+    
+                if ($detalheSalao) {
+                    $dadosUnidos = array_merge($endereco, $detalheSalao);
+                    $dados[] = $dadosUnidos;
+                }
+            }
+            return $dados;
         }
     }
+    
     public function buscarPorBairro(){
         $condicoes = ['bairro' => $this->enderecos->getBairro()];
         $resultados = $this->select($this->enderecos, $condicoes);
