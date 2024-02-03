@@ -26,4 +26,12 @@ class PerfilController extends Crud{
             return $resultadon;
         }
     }
+    public function removerPerfil(){
+        $resultado=$this->delete($this->perfil,['id'=> $this->perfil->getId()]);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Não pode excluir.'];
+        }else{
+            return ['status' => true, 'message' => 'Excluido com sucesso.'];
+        }
+    }
 }

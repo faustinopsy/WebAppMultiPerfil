@@ -67,17 +67,20 @@ export default class ListaSaloes {
         
         const searchDiv = document.createElement('div');
         searchDiv.innerHTML='';
-        searchDiv.className = 'w3-container';
+        searchDiv.className = 'w3-bar';
         const inputBairro = document.createElement('input');
         inputBairro.className = "w3-input";
-        inputBairro.classList.add("w3-border");
+        inputBairro.style.width = "100%";
+        // inputBairro.style.marginLeft= '20px';
+        inputBairro.classList.add('w3-border', 'w3-bar-item');
         inputBairro.type = 'text';
         inputBairro.placeholder = 'Digite o bairro...';
         inputBairro.id = 'inputBairro';
         
         const searchButton = document.createElement('button');
         searchButton.className = "w3-button";
-        searchButton.classList.add('w3-blue');
+        searchButton.classList.add('w3-blue','w3-bar-item');
+        searchButton.style.width = "100%";
         searchButton.textContent = 'Buscar';
         searchButton.addEventListener('click', () => {
             const bairro = document.getElementById('inputBairro').value;

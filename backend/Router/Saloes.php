@@ -3,6 +3,7 @@ namespace App\Router;
 
 use App\Controller\SaloesController;
 use App\Model\Saloes;
+use App\Model\Enderecos;
 use App\Controller\TokenController;
 header('Content-Type: application/json');
 function addSaloesRoutes($router) {
@@ -25,8 +26,9 @@ function addSaloesRoutes($router) {
                 exit;
             }
             $saloes->setIdusuario($iduser);
+            $enderecos = new Enderecos();
             $saloesController = new SaloesController($saloes);
-            $resultado = $saloesController->listarMeuSalao(); 
+            $resultado = $saloesController->listarMeuSalao($enderecos);  
             echo json_encode($resultado);
         });
         $router->get('/(\d+)', function ($id) {

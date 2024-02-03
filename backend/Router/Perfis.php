@@ -29,5 +29,14 @@ function addPerfilRoutes($router) {
             $resultado = $controller->adicionarPerfil();
             echo json_encode($resultado);
     });
+    $router->delete('/(\d+)', function ($id) {
+        $permitido = new TokenController();
+        $permitido->autorizado();
+        $perfil = new Perfis();
+        $perfil->setId($id);
+        $controller = new PerfilController($perfil);
+        $resultado = $controller->removerPerfil();
+        echo json_encode($resultado);
+    });
 });
 }

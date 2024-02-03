@@ -29,7 +29,7 @@ export default class LoginScreen {
             messageElement.innerText = message;
             document.getElementById('id02').style.display = 'block';
         } else {
-            alert(message); 
+            Swal.fire("Sucesso!", message, "sucess");
         }
     }
 

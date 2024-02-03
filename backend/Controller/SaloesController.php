@@ -31,12 +31,16 @@ class SaloesController extends Crud{
             return $resultado;
         }
     }
-    public function listarMeuSalao(){
+    public function listarMeuSalao($enderecos){
         $resultado = $this->select($this->saloes,['idusuario'=>$this->saloes->getIdusuario()]);
+        $condicoes = ['idsalao' => $resultado[0]["id"]];
+        $resultados = $this->select($enderecos, $condicoes);
+        $resultadon = count($resultados) > 0 ? ['endereco'=> true] : ['endereco'=> false] ;
+        $novoarray[0] = array_merge($resultado[0],$resultadon);
         if(!$resultado){
             return $resultado;
         }else{
-            return $resultado;
+            return $novoarray;
         }
     }
     public function buscarPorId(int $id){

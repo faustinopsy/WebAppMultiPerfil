@@ -13,6 +13,15 @@ export default class HeatmapComponent {
     init() {
         this.fetchHeatmapData();
         this.setupSwitchListener();
+        this.atualizaEstiloCabecalho();
+    }
+
+    atualizaEstiloCabecalho() {
+        const cabecalho = document.querySelector('.app-header');
+        if (cabecalho) {
+            cabecalho.style.background = 'linear-gradient(rgb(0, 0, 0), rgb(242 35 35), rgb(7 15 6))'; 
+            cabecalho.style.boxShadow = 'rgb(0 0 0) 0px 36px 36px 56px'; 
+        }
     }
 
     async fetchHeatmapData() {
@@ -53,7 +62,6 @@ export default class HeatmapComponent {
        
     
         const filteredData = data.filter(item => String(item.isMobile) === String(isMobile));
-        console.log(filteredData)
         const points = filteredData.map(item => {
             const containerWidth = container.offsetWidth;
             const containerHeight = container.offsetHeight;
@@ -74,6 +82,7 @@ export default class HeatmapComponent {
     
 
     render() {
+        document.getElementById('titulo').innerHTML='Experiência dos usuários';
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main';
         mainDiv.classList.add = 'container';

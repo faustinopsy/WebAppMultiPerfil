@@ -24,5 +24,12 @@ class PermissaoController extends Crud{
             return $resultadon;
         }
     }
-
+    public function removerPermissao(){
+        $resultado=$this->delete($this->permissoes,['id'=> $this->permissoes->getId()]);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Não pode excluir.'];
+        }else{
+            return ['status' => true, 'message' => 'Excluido com sucesso.'];
+        }
+    }
 }

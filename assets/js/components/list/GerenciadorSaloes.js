@@ -25,17 +25,21 @@ export default class GerenciadorSaloes {
             
         }
     }
-    
+    async deleteEndereco(salaoid) {
+        return await this.buscaApi.fetchApi(`Enderecos/${salaoid}`, 'DELETE');
+    }
     renderSaloes(saloes='') {
         const divUser = document.querySelector('.main');
         const container1 = document.createElement("div");
         const salaoBtn = document.createElement('button');
+        const hr = document.createElement('hr');
         salaoBtn.textContent = "Cadastrar salão";
         salaoBtn.classList.add("w3-button", "w3-border","w3-green", "w3-hover-black");
         salaoBtn.addEventListener('click', async () => {
             this.navigate('cadsalao');
         });
-        if(saloes.length<1){
+        
+        if(saloes.length<1 ){
             container1.appendChild(salaoBtn);
             divUser.appendChild(container1);
         }
@@ -46,25 +50,40 @@ export default class GerenciadorSaloes {
                 container.classList.add("w3-card-4");
                 container.innerHTML = `
                     <div class="w3-container">
-                        <h3>Meu Salão</h3>
+                        <h4>Meu Salão</h4>
                         <p hidden>Id: ${salao.id}</p>
                         <h3>Nome: ${salao.nome}</h3>
                     </div>
-                    
+                    <hr>
                 `;
+                
                 const idSalao = salao.id;
                 const enderecoBtn = document.createElement('button');
                 enderecoBtn.textContent = "Cadastrar Endereço";
-                enderecoBtn.classList.add("w3-button","w3-green", "w3-border", "w3-hover-black");
+                enderecoBtn.classList.add("w3-button-2","w3-green", "w3-border", "w3-hover-black", "w3-block");
                 enderecoBtn.addEventListener('click', async () => {
                     this.navigate('cadendereco',  idSalao );
                 });
-                container.appendChild(enderecoBtn);
-    
-    
+                const enderecoremove = document.createElement('button');
+                    enderecoremove.textContent = "Remover Endereço";
+                    enderecoremove.classList.add("w3-button-2","w3-yellow", "w3-border", "w3-hover-black", "w3-block");
+                    enderecoremove.addEventListener('click', async () => {
+                        const isConfirmed = await this.mensagem.confirmAction('delete');
+                        if (isConfirmed) {
+                            const result = await this.deleteEndereco(idSalao);
+                            if(result.status){
+                                Swal.fire("Sucesso!", result.message, "sucess");
+                                enderecoremove.remove();
+                                removeBtn.remove();
+                                container.appendChild(enderecoBtn);
+                                container.appendChild(removeBtn);
+                            }
+                        }
+                       
+                    });
                 const removeBtn = document.createElement('button');
                 removeBtn.textContent = "Remover Salão";
-                removeBtn.classList.add("w3-button","w3-red", "w3-border", "w3-hover-black");
+                removeBtn.classList.add("w3-button","w3-red", "w3-border","w3-tiny", "w3-hover-black", "w3-block");
                 removeBtn.addEventListener('click', async () => {
                     const isConfirmed = await this.mensagem.confirmAction('delete');
                     if (isConfirmed) {
@@ -77,8 +96,14 @@ export default class GerenciadorSaloes {
                         }
                     }
                 });
+               
+                if(!salao.endereco){
+                    container.appendChild(enderecoBtn);
+                }
+                if(salao.endereco){
+                    container.appendChild(enderecoremove);
+                }
                 container.appendChild(removeBtn);
-                
                 divUser.appendChild(container);
             });
         }
@@ -86,6 +111,7 @@ export default class GerenciadorSaloes {
     }
 
     render() {
+        document.getElementById('titulo').innerHTML='Gerir Salões';
         const mainDiv = document.createElement('div');
         mainDiv.className = 'main';
         return {

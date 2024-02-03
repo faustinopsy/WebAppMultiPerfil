@@ -34,6 +34,14 @@ function addPermissaoRoutes($router) {
             $resultado = $controller->adicionarPermissao(); 
             echo json_encode($resultado);
         });
-        
+        $router->delete('/(\d+)', function ($id) {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $permissoes = new Permissoes();
+            $permissoes->setId($id);
+            $controller = new PermissaoController($permissoes);
+            $resultado = $controller->removerPermissao();
+            echo json_encode($resultado);
+        });
     });
 }

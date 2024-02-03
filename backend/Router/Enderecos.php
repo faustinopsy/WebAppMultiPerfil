@@ -59,13 +59,12 @@ function addEnderecosRoutes($router) {
             $resultado = $EnderecosController->adicionarEndereco();
             echo json_encode($resultado);
         });
-        $router->delete('/', function () {
+        $router->delete('/(\d+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
-            $body = json_decode(file_get_contents('php://input'), true);
             $enderecos = new Enderecos();
             $saloes = new Saloes();
-            $enderecos->setId($body['id']);
+            $saloes->setId($id);
             $EnderecosController = new EnderecosController($enderecos,$saloes );
             $resultado = $EnderecosController->removerEndereco();
             if(!$resultado){

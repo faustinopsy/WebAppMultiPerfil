@@ -11,7 +11,7 @@ export default class RecoveryScreen {
             const data = await this.buscaApi.fetchApi('recuperarsenha', 'POST', { email });
 
             if (data.status) {
-                alert("Você recebeu um email com uma senha temporária");
+                Swal.fire("Alerta!","Você recebeu um email com uma senha temporária", "info");
                 this.navigate('login'); 
             } else {
                 this.displayMessage("Falhou: " + data.message);
@@ -28,7 +28,7 @@ export default class RecoveryScreen {
             messageElement.innerText = message;
             document.getElementById('id02').style.display = 'block';
         } else {
-            alert(message); 
+            Swal.fire("Alerta!",message, "info");
         }
     }
 

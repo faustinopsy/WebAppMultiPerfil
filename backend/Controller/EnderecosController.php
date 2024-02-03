@@ -65,7 +65,7 @@ class EnderecosController extends Crud{
     }
     
     public function removerEndereco(){
-        $condicoes = ['id' => $this->enderecos->getId()];
+        $condicoes = ['idsalao' => $this->saloes->getId()];
         $resultado = $this->delete($this->enderecos, $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
