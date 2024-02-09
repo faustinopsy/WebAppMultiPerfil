@@ -56,7 +56,7 @@ class Crud extends Connection{
                             break;
                         case 'BETWEEN':
                             if (is_array($condition[1]) && count($condition[1]) == 2) {
-                                $conditionStrings[] = "$key BETWEEN :${key}_min AND :${key}_max";
+                                $conditionStrings[] = "$key BETWEEN :{$key}_min AND :{$key}_max";
                             }
                             break;
                     }
@@ -82,8 +82,8 @@ class Crud extends Connection{
                             break;
                         case 'BETWEEN':
                             if (is_array($condition[1]) && count($condition[1]) == 2) {
-                                $stmt->bindValue(":${key}_min", $condition[1][0]);
-                                $stmt->bindValue(":${key}_max", $condition[1][1]);
+                                $stmt->bindValue(":{$key}_min", $condition[1][0]);
+                                $stmt->bindValue(":{$key}_max", $condition[1][1]);
                             }
                             break;
                     }

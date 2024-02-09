@@ -1,8 +1,10 @@
 import BuscaApi from '../lib/BuscaApiG.js';
 export default class MapaSaloes {
-    constructor() {
+    constructor(navigateCallback) {
+        this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
         this.mapa = null; 
+        this.navbar = null;
         this.init();
     }
 

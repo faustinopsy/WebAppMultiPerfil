@@ -1,0 +1,7 @@
+RewriteEngine On
+# Verifica se o documento solicitado é um arquivo real
+RewriteCond %{REQUEST_FILENAME} !-f
+# E se é um diretório real
+RewriteCond %{REQUEST_FILENAME} !-d
+# Se não for um arquivo ou diretório, redirecione para index.php
+RewriteRule ^ index.php [L]

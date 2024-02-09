@@ -89,7 +89,7 @@ getComponentInstance(link, params) {
                         return new CadEnderecos(this.navigate.bind(this),params);
 
                 case 'mapa':
-                    return new MapaSaloes();
+                    return new MapaSaloes(this.navigate.bind(this));
 
                 default:
                     return null;

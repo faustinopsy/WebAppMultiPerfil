@@ -11,7 +11,7 @@ export default class ValidadorToken {
 
     async init() {
         if (!this.token) {
-            this.redirecioneLogin();
+            this.initializeNavbarPublico();
         } else {
             await this.validaToken();
             setInterval(() => this.validaToken(), 10000);
@@ -28,7 +28,8 @@ export default class ValidadorToken {
                 this.telasPermitidas = data.telas; 
                 this.initializeNavbar();
             } else {
-                this.redirecioneLogin();
+                sessionStorage.removeItem('token');
+                location.reload();
             }
             
         } catch (error) {
@@ -37,6 +38,16 @@ export default class ValidadorToken {
         }
     }
     initializeNavbar() {
+        if (!this.navbar) {
+            this.navbar = new Navbar(this.navigate, this.telasPermitidas);
+            const navbarElement = this.navbar.renderRestrito();
+            document.body.insertBefore(navbarElement, document.getElementById('app'));
+            this.navbar.init();
+        } else {
+            this.navbar.updatePermitidas(this.telasPermitidas);
+        }
+    }
+    initializeNavbarPublico() {
         if (!this.navbar) {
             this.navbar = new Navbar(this.navigate, this.telasPermitidas);
             const navbarElement = this.navbar.render();
