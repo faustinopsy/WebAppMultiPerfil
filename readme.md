@@ -3,7 +3,7 @@ Autenticação e Autorização (somente back via API)
 Instruções:
 Clone o repositório e instale as dependências:
 ```
-git clone https://github.com/faustinopsy/multipermissao.git
+git clone https://github.com/faustinopsy/WebAppMultiPerfil.git
 
 composer install
 ```
