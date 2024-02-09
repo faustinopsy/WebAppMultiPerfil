@@ -22,14 +22,28 @@ class UsuarioController extends Crud{
         $this->PerfilPermissoes = new PerfilPermissoes();
         $this->permissoes = new Permissoes();
     }
-    
-    public function validarToken($token){
-        
+    public function idUser($token){
+       
         $key = TOKEN;
         $algoritimo = 'HS256';
         try {
             $decoded = JWT::decode($token, new Key($key, $algoritimo));
+            return $decoded->sub;
+        } catch(Exception $e) {
+            return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
+        }
+    }
+    public function validarToken($token){
+        $key = TOKEN;
+        $algoritimo = 'HS256';
+        try {
+            $decoded = JWT::decode($token, new Key($key, $algoritimo));
+            $condicoes = ['id' => $decoded->sub];
+            $resultado = $this->select($this->usuarios, $condicoes);
             $permissoes = $decoded->telas;
+            if(!$resultado){
+                return ['status' => false, 'message' => 'Token inválido! Motivo: usuário invalido'];
+            }
             if($_SERVER['SERVER_NAME']==$decoded->aud){
                 return ['status' => true, 'message' => 'Token válido!', 'telas'=>$permissoes];
             }else{
@@ -70,7 +84,7 @@ class UsuarioController extends Crud{
                 "aud" =>  $nome,
                 "iat" => time(),
                 "exp" => time() + (60 * $checado),  
-                "sub" => $this->usuarios->getEmail(),
+                "sub" => $resultado[0]['id'],
                 'telas'=>$permissoesNomes
             ];
             
@@ -104,28 +118,53 @@ class UsuarioController extends Crud{
     }
     
     public function listarUsuarios(){
-        return $this->select($this->usuarios,[]);
+        $resultadon = $this->select($this->usuarios,[]);
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Não existe dados a retornar.'];
+        }else{
+            return $resultadon;
+        }
     }
     
     public function buscarPorEmail(string $email){
         $condicoes = ['email' => $email];
         $resultados = $this->select($this->usuarios, $condicoes);
-        return count($resultados) > 0 ? $resultados[0] : null;
+        $resultadon = count($resultados) > 0 ? $resultados[0] : false;
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Não existe dados a retornar.'];
+        }else{
+            return $resultadon;
+        }
     }
     public function bloquearPorEmail(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        return  $this->update($this->usuarios, $condicoes);
+        $resultado = $this->update($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return ['status' => true, 'message' => 'BLoqueado com sucesso.'];
+        }
         
     }
     public function buscarPorId(int $id){
         $condicoes = ['id' => $id];
         $resultados = $this->select($this->usuarios, $condicoes);
-        return count($resultados) > 0 ? $resultados[0] : null;
+        $resultadon = count($resultados) > 0 ? $resultados[0] : null;
+        if(!$resultadon){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return $resultadon;
+        }
     }
     
     public function removerUsuario(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        return $this->delete($this->usuarios, $condicoes);
+        $resultado = $this->delete($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Não pode excluir.'];
+        }else{
+            return ['status' => true, 'message' => 'Excluido com sucesso.'];
+        }
     }
     public function gerarStringAlfanumerica($tamanho) {
         $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

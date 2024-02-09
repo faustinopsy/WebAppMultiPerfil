@@ -3,7 +3,7 @@ namespace App\Router;
 
 use App\Controller\AnaliticosController;
 use App\Model\Analiticos;
-use App\Controller\UsuarioPermissaoController;
+use App\Controller\TokenController;
 
 function addAnaliticosRoutes($router) {
     $router->mount('/Analitico', function () use ($router) {
@@ -21,7 +21,7 @@ function addAnaliticosRoutes($router) {
         });
 
         $router->get('/(\d+)', function ($id) {
-            $permitido = new UsuarioPermissaoController();
+            $permitido = new TokenController();
             $permitido->autorizado();
             $analitico = new Analiticos();
             $analiticoController = new AnaliticosController($analitico);

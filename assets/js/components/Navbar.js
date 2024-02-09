@@ -4,9 +4,15 @@ export default class Navbar {
         this.menuItems = [
             { text: 'admin', icon: "assets/img/admin.png"},
             { text: 'sobre', icon: "assets/img/about.png" },
-            { text: 'produtos', icon: "assets/img/home.png"},
+            { text: 'mapa', icon: "assets/img/home.png"},
+            { text: 'gerirsaloes', icon: "assets/img/salon.png"},
             { text: 'login', icon: "assets/img/login.png" },
             { text: 'usuarios', icon: "assets/img/users.png" },
+        ];
+        this.menuItemsPublicos = [
+            { text: 'sobre', icon: "assets/img/about.png" },
+            { text: 'mapa', icon: "assets/img/home.png"},
+            { text: 'login', icon: "assets/img/login.png" },
         ];
         this.telasPermitidas = telasPermitidas;
     }
@@ -28,9 +34,9 @@ export default class Navbar {
     }
     updatePermitidas(novasTelasPermitidas) {
         this.telasPermitidas = novasTelasPermitidas;
-        this.render(); 
+        this.renderRestrito(); 
     }
-    render() {
+    renderRestrito() {
         const navbarElement = document.createElement('header');
         navbarElement.id = 'navbar';
         
@@ -49,11 +55,33 @@ export default class Navbar {
                 linkElement.appendChild(icon);
                 navbarElement.appendChild(linkElement);
             }
+            
         });
 
         return navbarElement;
     }
+    render() {
+        const navbarElement = document.createElement('header');
+        navbarElement.id = 'navbar';
+        
+        this.menuItemsPublicos.forEach(item => {
+                const linkElement = document.createElement('a');
+                linkElement.href = '#';
+                linkElement.className = 'btn';
+                const icon = document.createElement('img');
+                icon.className = 'icon';
+                icon.src = item.icon;
 
+                linkElement.dataset.link = item.text;
+                linkElement.addEventListener('click', (event) => this.onNavigate(event, item.text));
+                linkElement.appendChild(icon);
+                navbarElement.appendChild(linkElement);
+            
+            
+        });
+
+        return navbarElement;
+    }
     onNavigate(event, link) {
         event.preventDefault();
         this.navigateCallback(link);
@@ -64,7 +92,7 @@ export default class Navbar {
         navbarElement.classList.toggle('responsive');
     }
     update() {
-        const navbarElement = this.render();
+        const navbarElement = this.renderRestrito();
         document.body.replaceChild(navbarElement, document.querySelector('header'));
     }
     

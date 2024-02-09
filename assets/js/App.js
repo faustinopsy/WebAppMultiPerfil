@@ -4,11 +4,14 @@ import LoginScreen from './components/screen/LoginScreen.js';
 import GerenciadorPermissoes from './components/list/GerenciadorPermissoes.js';
 import RegistrationScreen from './components/screen/RegistrationScreen.js';
 import RecoveryScreen from './components/screen/RecoveryScreen.js';
-import ListaProdutos from './components/list/ListaProdutos.js';
+import ListaSaloes from './components/list/ListaSaloes.js';
 import Admin from './components/screen/Admin.js';
 import About from './components/screen/About.js';
-import GerenciadorProdutos from './components/list/GerenciadorProdutos.js';
+import GerenciadorSaloes from './components/list/GerenciadorSaloes.js';
 import HeatmapComponent from './components/lib/HeatmapComponent.js';
+import CadSaloes from './components/cad/CadSaloes.js';
+import CadEnderecos from './components/cad/CadEnderecos.js';
+import MapaSaloes from './components/screen/MapaSaloes.js';
 
 class App {
     constructor() {
@@ -18,7 +21,7 @@ class App {
         this.tokenJWT.init();
     }
 
-navigate(link) {
+navigate(link, params = {}) {
     if (this.appElement) {
         this.appElement.innerHTML = '';
     } else {
@@ -26,7 +29,7 @@ navigate(link) {
     }
     
 
-    let componentInstance =  this.getComponentInstance(link);
+    let componentInstance =  this.getComponentInstance(link, params);
     
 
     if (componentInstance) {
@@ -46,7 +49,7 @@ addPopStateListener() {
 }
 
 
-getComponentInstance(link) {
+getComponentInstance(link, params) {
   
             switch (link) {
                 case 'usuarios':
@@ -67,18 +70,27 @@ getComponentInstance(link) {
                 case 'sobre':
                     return new About(this.userLanguage);
                    
-                case 'produtos':
-                    return new ListaProdutos();
+                case 'saloes':
+                    return new ListaSaloes();
 
-                case 'gerirprodutos':
-                    return new GerenciadorProdutos();
+                case 'gerirsaloes':
+                    return new GerenciadorSaloes(this.navigate.bind(this));
                    
                 case 'login':
                     return new LoginScreen(this.navigate.bind(this));
                 
                 case 'experiencia':
                     return new HeatmapComponent();
+                
+                case 'cadsalao':
+                    return new CadSaloes(this.navigate.bind(this));
                     
+                case 'cadendereco':
+                        return new CadEnderecos(this.navigate.bind(this),params);
+
+                case 'mapa':
+                    return new MapaSaloes(this.navigate.bind(this));
+
                 default:
                     return null;
                     
@@ -89,5 +101,6 @@ getComponentInstance(link) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    new App();
+   const app = new App();
+   app.navigate('mapa')
 });

@@ -3,7 +3,7 @@
 namespace App\Controller;
 use App\Model\Usuarios;
 
-class UsuarioPermissaoController {
+class TokenController {
 
     private $ips_permitidos;
     private $origesPermitidas;
@@ -33,6 +33,13 @@ class UsuarioPermissaoController {
             echo json_encode(['status'=>false,'mensagem' => 'Acesso não autorizado ip'], 403);
             exit;
         }
+    }
+    public function verIdUserToken(){
+        $usuario = new Usuarios();
+        $headers = getallheaders();
+        $token = $headers['Authorization'] ?? null;
+        $usuariosController = new UsuarioController($usuario);
+        return $usuariosController->idUser($token);
     }
     public function Token(){
         $usuario = new Usuarios();

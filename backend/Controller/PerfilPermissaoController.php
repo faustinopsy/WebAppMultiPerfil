@@ -2,47 +2,28 @@
 
 namespace App\Controller;
 
-use App\Model\Perfis;
-use App\Model\perfilpermissoes;
 use App\Database\Crud;
 
 class PerfilPermissaoController extends Crud {
     private $perfis;
     private $perfilpermissoes;
-    public function __construct(){
+    public function __construct($perfPermissoes){
         parent::__construct();
+        $this->perfilpermissoes = $perfPermissoes;
     }
-    public function AddPerfil($perfil,$dados){
-        $resultado=$this->select($perfil,['nome'=> $dados]);
+    
+    public function addAssociarPermissaoPerfil(){
+        $resultado=$this->select($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
         if(!$resultado){
-            $this->insert($perfil);
-            return ['status' => true, 'message' => 'Inserido com sucesso.'];
-        }
-        return ['status' => false, 'message' => 'Perfil já existe.'];
-        
-    }
-    public function addPermissao($permissoes,$dados){
-        $resultado=$this->select($permissoes,['nome'=> $dados]);
-        if(!$resultado){
-            $this->insert($permissoes);
-            return ['status' => true, 'message' => 'Inserido com sucesso.'];
-        }
-        return ['status' => false, 'message' => 'Permissão já existe.'];
-        
-    }
-    public function addPermissaoPerfil($perfPermissoes,$chave1,$chave2){
-        $resultado=$this->select($perfPermissoes,['perfilid'=> $chave1,'permissao_id'=> $chave2]);
-        if(!$resultado){
-            $this->insert($perfPermissoes);
+            $this->insert($this->perfilpermissoes);
             return ['status' => true, 'message' => 'Inserido com sucesso.'];
         }else{
             return ['status' => false, 'message' => 'Associação já existe.'];
         }
         
-        
     }
-    public function removerPermissao($perfPermissoes,$perfil, $permissoes){
-        $resultado=$this->delete($perfPermissoes,['perfilid'=> $perfil->getId(), 'permissao_id'=> $permissoes->getId()]);
+    public function removerPermissao(){
+        $resultado=$this->delete($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
         }else{
@@ -50,24 +31,13 @@ class PerfilPermissaoController extends Crud {
         }
     }
 
-    public function obterPermissoesDoPerfil($perfPermissoes,$permissoes,$perfil){
-         $resultado = $this->select($perfPermissoes,['perfilid'=> $perfil->getId()]);
+    public function obterPermissoesDoPerfil($permissoes){
+         $resultado = $this->select($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid()]);
          $dados=[];
          foreach($resultado as $key => $value) {
             $dados[] = $this->select($permissoes,['id'=> $value['permissao_id']]);
          }
          return $dados;
     }
-
-    public function obterPerfisDaPermissao(Permissoes $Permissoes){
-        return $this->listarPerfisPorPermissao($Permissoes->getId());
-    }
-    public function listarPerfis($perfil){
-        return $this->select($perfil,[]);
-    }
-    public function listarPermissoes($permissoes){
-        return $this->select($permissoes,[]);
-    }
-    
 
 }

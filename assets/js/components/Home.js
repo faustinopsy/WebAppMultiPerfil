@@ -3,7 +3,7 @@ export default class MenuGenerator {
         this.navigateCallback = navigateCallback;
         this.menuItems = [
             { href: "facil", icon: "assets/img/lotofacil.png", text: "LOTOFACIL", id: "1-0" },
-            { href: "produtos", icon: "assets/img/megasena.png", text: "MEGASENA", id: "1-1" },
+            { href: "saloes", icon: "assets/img/megasena.png", text: "MEGASENA", id: "1-1" },
             { href: "index", icon: "assets/img/quina.png", text: "QUINA", id: "0-2" },
             { href: "usuarios", icon: "assets/img/users.png", text: "USERS", id: "0-0" },
             { href: "permissoes", icon: "assets/img/permiss.png", text: "PERFIL", id: "0-0" }

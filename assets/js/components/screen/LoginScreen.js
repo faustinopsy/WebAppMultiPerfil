@@ -10,6 +10,7 @@ export default class LoginScreen {
         try {
             const data = await this.buscaApi.fetchApi('Usuarios/login', 'POST', { email, senha: password, lembrar });
             if (data.status) {
+                console.log(data)
                 sessionStorage.setItem('token', data.token);
                 this.navigate('admin'); 
                 location.reload();
@@ -28,7 +29,7 @@ export default class LoginScreen {
             messageElement.innerText = message;
             document.getElementById('id02').style.display = 'block';
         } else {
-            alert(message); 
+            Swal.fire("Sucesso!", message, "sucess");
         }
     }
 
