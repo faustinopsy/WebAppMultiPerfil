@@ -31,7 +31,7 @@ function addSaloesRoutes($router) {
             $resultado = $saloesController->listarMeuSalao($enderecos);  
             echo json_encode($resultado);
         });
-        $router->get('/(\d+)', function ($id) {
+        $router->get('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $saloes = new Saloes();

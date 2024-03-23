@@ -17,8 +17,8 @@ class SaloesController extends Crud{
         $resultado=$this->select($this->saloes,['nome'=> $this->saloes->getNome()]);
         if(!$resultado){
             $this->insert($this->saloes);
-            $idSalao = $this->getLastInsertId();
-            return ['status' => true, 'message' => 'Inserido com sucesso.', 'idSalao'=> $idSalao ];
+            $idSalao = $this->select($this->saloes,['nome'=> $this->saloes->getNome()]);
+            return ['status' => true, 'message' => 'Inserido com sucesso.', 'idSalao'=> $idSalao[0]['id'] ];
         }
         return ['status' => false, 'message' => 'Salão já existe.'];
     }

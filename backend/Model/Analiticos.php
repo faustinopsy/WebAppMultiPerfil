@@ -1,26 +1,26 @@
 <?php
 
 namespace App\Model;
-
+use Ramsey\Uuid\Uuid;
 class Analiticos {
-    private int $id;
+    private string $id;
     private string $visitor_id;
-    private int $x;
-    private int $y;
+    private float $x;
+    private float $y;
     private string $time;
     private string $isMobile;
-    private int $screenWidth;
-    private int $screenHeight;
+    private float $screenWidth;
+    private float $screenHeight;
 
     public function __construct()
     {
-       
+        $this->id = Uuid::uuid4()->toString();
     }
-    public function getId(): int
+    public function getId(): string
     {
-        return $this->id;
+        return Uuid::uuid4()->toString();
     }
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
@@ -36,21 +36,21 @@ class Analiticos {
 
         return $this;
     }
-    public function getX(): int
+    public function getX(): float
     {
         return $this->x;
     }
-    public function setX(int $x): self
+    public function setX(float $x): self
     {
         $this->x = $x;
 
         return $this;
     }
-    public function getY(): int
+    public function getY(): float
     {
         return $this->y;
     }
-    public function setY(int $y): self
+    public function setY(float $y): self
     {
         $this->y = $y;
 
@@ -76,21 +76,21 @@ class Analiticos {
 
         return $this;
     }
-    public function getScreenWidth(): int
+    public function getScreenWidth(): float
     {
         return $this->screenWidth;
     }
-    public function setScreenWidth(int $screenWidth): self
+    public function setScreenWidth(float $screenWidth): self
     {
         $this->screenWidth = $screenWidth;
 
         return $this;
     }
-    public function getScreenHeight(): int
+    public function getScreenHeight(): float
     {
         return $this->screenHeight;
     }
-    public function setScreenHeight(int $screenHeight): self
+    public function setScreenHeight(float $screenHeight): self
     {
         $this->screenHeight = $screenHeight;
 

@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Model;
-
+use Ramsey\Uuid\Uuid;
 class Enderecos {
-    private int $id;
+    private string $id;
     private string $cep;
     private string $rua;
     private string $bairro;
@@ -11,18 +11,18 @@ class Enderecos {
     private string $estado;
     private string $latitude;
     private string $longitude;
-    private int $idusuario;
-    private int $idsalao;
+    private string $idusuario;
+    private string $idsalao;
 
     public function __construct()
     {
-       
+        $this->id = Uuid::uuid4()->toString();
     }
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
@@ -98,21 +98,21 @@ class Enderecos {
 
         return $this;
     }
-    public function getIdusuario(): int
+    public function getIdusuario(): string
     {
         return $this->idusuario;
     }
-    public function setIdusuario(int $idusuario): self
+    public function setIdusuario(string $idusuario): self
     {
         $this->idusuario = $idusuario;
 
         return $this;
     }
-    public function getSalao(): int
+    public function getSalao(): string
     {
         return $this->idsalao;
     }
-    public function setSalao(int $idsalao): self
+    public function setSalao(string $idsalao): self
     {
         $this->idsalao = $idsalao;
 

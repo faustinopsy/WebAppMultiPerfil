@@ -12,6 +12,7 @@ export default class LoginScreen {
             if (data.status) {
                 console.log(data)
                 sessionStorage.setItem('token', data.token);
+                sessionStorage.setItem('user', data.user);
                 this.navigate('admin'); 
                 location.reload();
             } else {

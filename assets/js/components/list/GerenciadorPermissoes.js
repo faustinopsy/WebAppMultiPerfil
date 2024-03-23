@@ -182,6 +182,7 @@ export default class GerenciadorPermissoes {
             const result = await this.deletePermissao(permissaoid);
             if(result.status){
                 Swal.fire("Sucesso!", result.message, "sucess");
+                setInterval(this.atualizarPagina, 1500);
             }
         });
 
@@ -216,7 +217,11 @@ export default class GerenciadorPermissoes {
             await this.populatePermissoesList(event.target.value);
         });
     }
+    
 
+    atualizarPagina() {
+        location.reload();
+    }
 
     showModal(modalId) {
         const modal = document.getElementById(modalId);

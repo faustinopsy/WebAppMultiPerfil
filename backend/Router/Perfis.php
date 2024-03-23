@@ -2,11 +2,9 @@
 namespace App\Router;
 
 use App\Controller\PerfilController;
-use App\Controller\PerfilPermissaoController;
-use App\Controller\TokenController;
 use App\Model\Perfis;
-use App\Model\Permissoes;
-use App\Model\perfilpermissoes;
+use App\Controller\TokenController;
+
 
 function addPerfilRoutes($router) {
     $router->mount('/Perfil', function () use ($router) {
@@ -29,7 +27,7 @@ function addPerfilRoutes($router) {
             $resultado = $controller->adicionarPerfil();
             echo json_encode($resultado);
     });
-    $router->delete('/(\d+)', function ($id) {
+    $router->delete('/([a-z0-9_-]+)', function ($id) {
         $permitido = new TokenController();
         $permitido->autorizado();
         $perfil = new Perfis();

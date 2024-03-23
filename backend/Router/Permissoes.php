@@ -34,7 +34,7 @@ function addPermissaoRoutes($router) {
             $resultado = $controller->adicionarPermissao(); 
             echo json_encode($resultado);
         });
-        $router->delete('/(\d+)', function ($id) {
+        $router->delete('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $permissoes = new Permissoes();

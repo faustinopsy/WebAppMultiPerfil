@@ -1,23 +1,23 @@
 <?php
 
 namespace App\Model;
-
+use Ramsey\Uuid\Uuid;
 class Saloes {
-    private int $id;
+    private  $id;
     private string $nome;
-    private int $idusuario;
+    private string $idusuario;
     private string $servicos;
     private int $ativo;
 
     public function __construct()
     {
-       
+        $this->id = Uuid::uuid4()->toString();
     }
-    public function getId(): int
+    public function getId(): string
     {
         return $this->id;
     }
-    public function setId(int $id): self
+    public function setId(string $id): self
     {
         $this->id = $id;
 
@@ -34,11 +34,11 @@ class Saloes {
         return $this;
     }
     
-    public function getIdusuario(): int
+    public function getIdusuario(): string
     {
         return $this->idusuario;
     }
-    public function setIdusuario(int $idusuario): self
+    public function setIdusuario(string $idusuario): self
     {
         $this->idusuario = $idusuario;
 

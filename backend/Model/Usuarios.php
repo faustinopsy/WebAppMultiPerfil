@@ -1,18 +1,18 @@
 <?php
 
 namespace App\Model;
-
+use Ramsey\Uuid\Uuid;
 class Usuarios {
-    private int $id;
+    private $id;
     private string $nome;
     private string $email;
     private string $senha;
-    private int $perfilid;
+    private string $perfilid;
     private int $ativo;
 
     public function __construct()
     {
-       
+        $this->id = Uuid::uuid4()->toString();
     }
     public function getId(): int
     {
@@ -64,13 +64,17 @@ class Usuarios {
         }
         $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
-    public function getPerfilId(): int
+    public function getPerfilId(): string
     {
         return $this->perfilid;
     }
 
-    public function setPerfilId(int $perfilid): void
+    public function setPerfilId(string $perfilid): void
     {
+        if($perfilid == 0 || $perfilid=='0'){
+            $this->perfilid = '';
+            return;
+        }
         $this->perfilid = $perfilid;
     }
     public function getAtivo(): int

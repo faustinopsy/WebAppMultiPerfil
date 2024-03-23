@@ -8,7 +8,7 @@ export default class RecoveryScreen {
 
     async recuperarSenha(email) {
         try {
-            const data = await this.buscaApi.fetchApi('recuperarsenha', 'POST', { email });
+            const data = await this.buscaApi.fetchApi('Usuarios/recuperarsenha', 'POST', { email });
 
             if (data.status) {
                 Swal.fire("Alerta!","Você recebeu um email com uma senha temporária", "info");

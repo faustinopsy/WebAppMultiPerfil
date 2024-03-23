@@ -58,6 +58,7 @@ class UsuarioController extends Crud{
         $resultado = $this->select($this->usuarios, $condicoes);
         $checado=$lembrar? 60*12 : 3;
         $permissoes=[];
+        $permissoesNomes=[];
         if (!$resultado) {
             return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
         }
@@ -80,18 +81,19 @@ class UsuarioController extends Crud{
         $key = TOKEN;
         $local=$_SERVER['HTTP_HOST'];
         $nome=$_SERVER['SERVER_NAME'];
+        $userid= $resultado[0]['id'];
         $algoritimo='HS256';
             $payload = [
                 "iss" =>  $local,
                 "aud" =>  $nome,
                 "iat" => time(),
                 "exp" => time() + (60 * $checado),  
-                "sub" => $resultado[0]['id'],
+                "sub" => $userid,
                 'telas'=>$permissoesNomes
             ];
             
             $jwt = JWT::encode($payload, $key,$algoritimo);
-        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'telas'=>$permissoesNomes];
+        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'telas'=>$permissoesNomes];
     }
     public function recupasenha(){
         $novasenha = $this->gerarStringAlfanumerica(8);
@@ -105,7 +107,7 @@ class UsuarioController extends Crud{
         $emailuser = $this->usuarios->getEmail();
         if($email->recupasenha($dados)){
             $senhacriptografada=password_hash($novasenha, PASSWORD_DEFAULT);
-            $query = "UPDATE usuario SET senha=:senha WHERE email=:email";
+            $query = "UPDATE usuarios SET senha=:senha WHERE email=:email";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':senha', $senhacriptografada);
             $stmt->bindParam(':email', $emailuser);
@@ -114,6 +116,21 @@ class UsuarioController extends Crud{
         }else {
             return ['status'=>false,'message'=>'falha ao enviar email!'];
         }
+    }
+    public function alterarSenha($senhaantiga,$novasenha){
+        $novasenha = $this->gerarStringAlfanumerica(8);
+        $condicoes = ['email' => $this->usuarios->getEmail()];
+        $resultado = $this->select($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Usuário não encontrado.'];
+        }
+        if (!password_verify($senhaantiga, $resultado[0]['senha'])) {
+            return ['status' => false, 'message' => 'Senha incorreta.'];
+        }
+        if($this->update($this->usuarios,$condicoes)){
+            return ['status' => true, 'message' => 'senha alterada com sucesso'];
+        }
+        
     }
     public function adicionarUsuario(){
         return $this->insert($this->usuarios);
@@ -158,7 +175,7 @@ class UsuarioController extends Crud{
         }
         
     }
-    public function buscarPorId(int $id){
+    public function buscarPorId(string $id){
         $condicoes = ['id' => $id];
         $resultados = $this->select($this->usuarios, $condicoes);
         $resultadon = count($resultados) > 0 ? $resultados[0] : null;
