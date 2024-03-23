@@ -33,15 +33,15 @@ class SaloesController extends Crud{
     }
     public function listarMeuSalao($enderecos){
         $resultado = $this->select($this->saloes,['idusuario'=>$this->saloes->getIdusuario()]);
+        if(!$resultado){
+            return $resultado;
+        }
         $condicoes = ['idsalao' => $resultado[0]["id"]];
         $resultados = $this->select($enderecos, $condicoes);
         $resultadon = count($resultados) > 0 ? ['endereco'=> true] : ['endereco'=> false] ;
         $novoarray[0] = array_merge($resultado[0],$resultadon);
-        if(!$resultado){
-            return $resultado;
-        }else{
-            return $novoarray;
-        }
+        return $novoarray;
+        
     }
     public function buscarPorId(int $id){
         $condicoes = ['id' => $id];

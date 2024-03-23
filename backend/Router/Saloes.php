@@ -44,6 +44,10 @@ function addSaloesRoutes($router) {
             $permitido->autorizado();
             $iduser= $permitido->verIdUserToken();
             $body = json_decode(file_get_contents('php://input'), true);
+            if(!isset($body['servicos'])){
+                echo json_encode(['status' => false, 'message' => 'Falta inserir os serviços']);
+                exit;
+            }
             $saloes = new Saloes();
             $saloes->setNome($body['titulo']);
             $saloes->setServicos($body['servicos']);

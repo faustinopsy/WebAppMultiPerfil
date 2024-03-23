@@ -64,7 +64,9 @@ class UsuarioController extends Crud{
         if (!password_verify($senha, $resultado[0]['senha'])) {
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
+        
         $perfper = $this->select($this->PerfilPermissoes,['perfilid'=>$resultado[0]['perfilid']]);
+        
         foreach($perfper as $key => $value){
             $permissoes[] = $this->select($this->permissoes,['id'=>$value['permissao_id']]);
         } 
@@ -143,6 +145,16 @@ class UsuarioController extends Crud{
             return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
         }else{
             return ['status' => true, 'message' => 'BLoqueado com sucesso.'];
+        }
+        
+    }
+    public function AlterarPerfil(){
+        $condicoes = ['email' => $this->usuarios->getEmail()];
+        $resultado = $this->update($this->usuarios, $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return ['status' => true, 'message' => 'Perfil Alterado com sucesso.'];
         }
         
     }

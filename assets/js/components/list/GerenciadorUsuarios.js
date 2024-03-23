@@ -3,13 +3,18 @@ import BuscaApi from '../lib/BuscaApiG.js';
 export default class GerenciadorUsuarios {
     constructor() {
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
+        this.usuario_perfil=null;
     }
 
     async init() {
         await this.buscaUsers();
+        await this.populatePerfis();
     }
     async inativeUsuario(email,chk) {
         return await this.buscaApi.fetchApi(`Usuarios`, 'PUT', { email,chk });
+    }
+    async perfilUsuario(email,perf) {
+        return await this.buscaApi.fetchApi(`Usuarios/perfil`, 'PUT', { email,perf });
     }
     async deleteUsuario(email) {
         return await this.buscaApi.fetchApi(`Usuarios`, 'DELETE', { email });
@@ -29,6 +34,7 @@ export default class GerenciadorUsuarios {
         const divUser = document.querySelector('.main');
 
         usuarios.forEach(usuario => {
+            this.usuario_perfil= usuario.perfilid;
             const container = document.createElement("div");
             container.classList.add("w3-card-4");
             container.innerHTML = `
@@ -36,13 +42,17 @@ export default class GerenciadorUsuarios {
                     <h3>Dados no banco</h3>
                     <p>Id: ${usuario.id}</p>
                     <h3>Nome: ${usuario.nome}</h3>
-                    <p>Email: ${usuario.email}</p>
+                    <p id="emailcard" data-email="${usuario.email}">Email: ${usuario.email}</p>
                 </div>
-                
+                <label for="perfilSelect">Perfil:</label>
+                <select class="perfilSelect w3-select" required>
+                    <option value="">Selecione</option>
+                </select>
             `;
             const switchLabel = document.createElement('label');
             switchLabel.classList.add('switch');
 
+            
             const ativeBtn = document.createElement('input');
             ativeBtn.id = "myCheck";
             ativeBtn.type = "checkbox";
@@ -88,7 +98,32 @@ export default class GerenciadorUsuarios {
 
         
     }
-
+    async getPerfis() {
+        return await this.buscaApi.fetchApi('Perfil', 'GET');
+    }
+    async populatePerfis() {
+        const perfis = await this.getPerfis();
+        const select = document.querySelectorAll('.perfilSelect');
+        select.forEach(select => {
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+        perfis.forEach(perfil => {
+            const option = document.createElement('option');
+            option.value = perfil.id;
+            option.textContent = perfil.nome;
+            select.appendChild(option);
+        });
+        select.addEventListener('change', async (event) => {
+            let email = document.getElementById("emailcard");
+            const result = await this.perfilUsuario(email.dataset.email,event.target.value);
+            if (result.status) {
+                Swal.fire("Sucesso!", `${result.status.message}`, "sucess");
+            }
+        });
+    });
+        
+    }
     render() {
         document.getElementById('titulo').innerHTML='Gerir Usuários';
         const mainDiv = document.createElement('div');

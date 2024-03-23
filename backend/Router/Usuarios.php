@@ -53,6 +53,21 @@ function addUsuarioRoutes($router) {
             $resultado = $usuariosController->bloquearPorEmail(); 
             echo json_encode(['status' => $resultado]);
         });
+        $router->put('/perfil', function () {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $body = json_decode(file_get_contents('php://input'), true);
+            $usuario = new Usuarios();
+            $usuario->setId(0);
+            $usuario->setNome(0);
+            $usuario->setSenha(0);
+            $usuario->setPerfilId($body['perf']);
+            $usuario->setEmail($body['email']);
+            $usuario->setAtivo(0);
+            $usuariosController = new UsuarioController($usuario);
+            $resultado = $usuariosController->AlterarPerfil(); 
+            echo json_encode(['status' => $resultado]);
+        });
         $router->post('/Registrar', function () {
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
