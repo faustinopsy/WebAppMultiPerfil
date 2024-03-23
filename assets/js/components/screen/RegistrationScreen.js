@@ -50,7 +50,7 @@ export default class RegistrationScreen {
                     <input class="w3-input w3-border w3-margin-bottom" type="password" id="senha" placeholder="Insira a senha" required />
                 </div>
                 <div class="w3-section">
-                    <label for="resenha">Repita a senha</label>
+                    <label for="resenha">Digite novamente a senha</label>
                     <input class="w3-input w3-border w3-margin-bottom" type="password" id="resenha" placeholder="Repita a senha" required />
                 </div>
                 <button type="submit" class="w3-button w3-block w3-green w3-section w3-padding">Registrar</button>

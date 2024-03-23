@@ -1,11 +1,25 @@
 <?php
 
 namespace App\Model;
-
+use Ramsey\Uuid\Uuid;
 class Perfis {
-    private int $id;
+    private $id;
     private string $nome;
 
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4()->toString();
+    }
+    public function getId(): string
+    {
+        return $this->id;
+    }
+    public function setId(string $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
     public function getNome(): string
     {
         return $this->nome;
@@ -18,15 +32,5 @@ class Perfis {
         return $this;
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
+    
 }

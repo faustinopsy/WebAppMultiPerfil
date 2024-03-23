@@ -59,7 +59,7 @@ function addEnderecosRoutes($router) {
             $resultado = $EnderecosController->adicionarEndereco();
             echo json_encode($resultado);
         });
-        $router->delete('/(\d+)', function ($id) {
+        $router->delete('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $enderecos = new Enderecos();

@@ -31,7 +31,7 @@ function addSaloesRoutes($router) {
             $resultado = $saloesController->listarMeuSalao($enderecos);  
             echo json_encode($resultado);
         });
-        $router->get('/(\d+)', function ($id) {
+        $router->get('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $saloes = new Saloes();
@@ -44,6 +44,10 @@ function addSaloesRoutes($router) {
             $permitido->autorizado();
             $iduser= $permitido->verIdUserToken();
             $body = json_decode(file_get_contents('php://input'), true);
+            if(!isset($body['servicos'])){
+                echo json_encode(['status' => false, 'message' => 'Falta inserir os serviços']);
+                exit;
+            }
             $saloes = new Saloes();
             $saloes->setNome($body['titulo']);
             $saloes->setServicos($body['servicos']);

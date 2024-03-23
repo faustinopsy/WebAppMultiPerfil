@@ -1,6 +1,6 @@
 <?php
-  define('MAIL_HOST', 'mail.seuprovedorsite.com');
-  define('MAIL_USERNAME', 'contato@seuprovedorsite.com');
-  define('MAIL_PASSWORD', 'senhadoemail');
-  define('MAIL_FROM', 'contato@seuprovedorsite.com');
+  define('MAIL_HOST', 'mail.hospedagem.com');
+  define('MAIL_USERNAME', 'contato@hospedagem.com');
+  define('MAIL_PASSWORD', 'senha');
+  define('MAIL_FROM', 'contato@hospedagem.com');
   define('MAIL_PORT', '587');

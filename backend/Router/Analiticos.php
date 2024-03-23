@@ -20,7 +20,7 @@ function addAnaliticosRoutes($router) {
             }
         });
 
-        $router->get('/(\d+)', function ($id) {
+        $router->get('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $analitico = new Analiticos();
@@ -42,8 +42,8 @@ function addAnaliticosRoutes($router) {
                 $mobile = $movement['isMobile'] ? 1 : 0;
                 $mysqlDateTime = date('Y-m-d H:i:s', $timestampInSeconds);
                 $analitico->setVisitorId($movement['visitor_id']);
-                $analitico->setX($movement['x']);
-                $analitico->setY($movement['y']);
+                $analitico->setX(floatval($movement['x']));
+                $analitico->setY(floatval($movement['y']));
                 $analitico->setTime($mysqlDateTime);
                 $analitico->setIsMobile($mobile);
                 $analitico->setScreenWidth($movement['screenSize']['width']);

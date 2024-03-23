@@ -6,8 +6,18 @@ class MouseTrackerSDK {
     }
 
     init() {
+        const touchArea = document.getElementById('app');
+
+        touchArea.addEventListener('touchstart', this.trackMouseMovement.bind(this));
+        touchArea.addEventListener('touchmove', this.trackMouseMovement.bind(this), {passive: false});
+        touchArea.addEventListener('touchend', this.trackMouseMovement.bind(this));
+        touchArea.addEventListener('touchcancel', this.trackMouseMovement.bind(this));
+    
         document.addEventListener('mousemove', this.trackMouseMovement.bind(this));
-        setInterval(this.sendDataToServer.bind(this), this.options.sendInterval || 10000);
+        document.body.addEventListener('mousemove', function(event) {
+            console.log(event);
+        });
+        
     }
 
     trackMouseMovement(event) {
@@ -22,6 +32,9 @@ class MouseTrackerSDK {
         }
 
         this.mouseMovements.push(movementData);
+        if (this.mouseMovements.length >= 15) { 
+            this.sendDataToServer();
+        }
 
         if (this.mouseMovements.length > this.options.bufferSize) {
             this.mouseMovements.shift();
@@ -62,4 +75,4 @@ class MouseTrackerSDK {
     }
 }
 
-window.MouseTrackerSDK = MouseTrackerSDK;
+const mouser = new MouseTrackerSDK();

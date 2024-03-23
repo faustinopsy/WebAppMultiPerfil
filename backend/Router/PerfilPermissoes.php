@@ -20,7 +20,7 @@ function addAssociarRoutes($router) {
             $resultado = $controller->addAssociarPermissaoPerfil(); 
             echo json_encode($resultado);
         });
-        $router->get('/(\d+)', function ($id) {
+        $router->get('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $permissoes = new Permissoes();
@@ -30,7 +30,7 @@ function addAssociarRoutes($router) {
             $resultado = $controller->obterPermissoesDoPerfil($permissoes);
             echo json_encode($resultado);
         });
-        $router->delete('/(\d+)', function ($id) {
+        $router->delete('/([a-z0-9_-]+)', function ($id) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $perfPermissoes = new perfilpermissoes();

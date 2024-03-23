@@ -18,11 +18,11 @@ export default class CadSaloes {
                 const salao = data.idSalao;
                 this.navigate('cadendereco', salao );
             } else {
-                this.displayMessage('Erro ao registrar o Salão.');
+                this.displayMessage(`Erro ao registrar o Salão. ${data.message}`);
             }
         } catch (error) {
             console.error('Erro ao registrar:', error);
-            this.displayMessage('Erro ao registrar o Salão.');
+            this.displayMessage(`Erro ao registrar o Salão.${data.message}`);
         }
     }
 
@@ -82,9 +82,8 @@ export default class CadSaloes {
                     salao[element.name] = element.value;
                 }
             }
-
             if (salao.titulo=='') {
-                this.displayMessage("Insira um titulo");
+                this.displayMessage("Insira um titulo e serviços");
                 return;
             }
             const isConfirmed = await this.mensagem.confirmAction('create');

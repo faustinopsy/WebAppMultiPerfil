@@ -3,24 +3,24 @@
 namespace App\Model;
 
 class perfilpermissoes {
-    private int $perfilid;
-    private int $permissao_id;
+    private string $perfilid;
+    private string $permissao_id;
 
-    public function getPerfilid(): int
+    public function getPerfilid(): string
     {
         return $this->perfilid;
     }
-    public function setPerfilid(int $perfilid): self
+    public function setPerfilid(string $perfilid): self
     {
         $this->perfilid = $perfilid;
 
         return $this;
     }
-    public function getPermissaoId(): int
+    public function getPermissaoId(): string
     {
         return $this->permissao_id;
     }
-    public function setPermissaoId(int $permissao_id): self
+    public function setPermissaoId(string $permissao_id): self
     {
         $this->permissao_id = $permissao_id;
 

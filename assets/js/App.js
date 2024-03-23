@@ -12,6 +12,7 @@ import HeatmapComponent from './components/lib/HeatmapComponent.js';
 import CadSaloes from './components/cad/CadSaloes.js';
 import CadEnderecos from './components/cad/CadEnderecos.js';
 import MapaSaloes from './components/screen/MapaSaloes.js';
+import MinhaArea from './components/screen/MinhaArea.js';
 
 class App {
     constructor() {
@@ -60,6 +61,9 @@ getComponentInstance(link, params) {
                    
                 case 'cadastro':
                     return new RegistrationScreen(this.navigate.bind(this));
+                
+                case 'minhaarea':
+                    return new MinhaArea();
                    
                 case 'admin':
                     return new Admin(this.navigate.bind(this), this.userLanguage);
