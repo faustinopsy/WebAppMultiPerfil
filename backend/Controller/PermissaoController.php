@@ -9,15 +9,15 @@ class PermissaoController extends Crud{
         $this->permissoes=$permissoes;
     }
     public function adicionarPermissao(){
-        $resultado=$this->select($this->permissoes,['nome'=> $this->permissoes->getNome()]);
+        $resultado=$this->select($this->permissoes->getTable(),['nome'=> $this->permissoes->getNome()]);
         if(!$resultado){
-            $this->insert($this->permissoes);
+            $this->insert($this->permissoes->getTable(),['id'=> $this->permissoes->getId(),'nome'=> $this->permissoes->getNome()] );
             return ['status' => true, 'message' => 'Inserido com sucesso.'];
         }
         return ['status' => false, 'message' => 'Permissão já existe.'];
     }
     public function listarPermissoes(){
-        $resultadon = $this->select($this->permissoes,[]);
+        $resultadon = $this->select($this->permissoes->getTable(),[]);
         if(!$resultadon){
             return ['status' => false, 'message' => 'Não existe dados a retornar.'];
         }else{
@@ -25,7 +25,7 @@ class PermissaoController extends Crud{
         }
     }
     public function removerPermissao(){
-        $resultado=$this->delete($this->permissoes,['id'=> $this->permissoes->getId()]);
+        $resultado=$this->delete($this->permissoes->getTable(),['id'=> $this->permissoes->getId()]);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
         }else{

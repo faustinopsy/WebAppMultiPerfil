@@ -2,14 +2,11 @@
 
 namespace App\Controller;
 use App\Database\Crud;
-use App\Model\Usuarioa;
 use App\Model\PerfilPermissoes;
 use App\Model\Permissoes;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use stdClass;
-use App\Cryptonita\Crypto;
 
 class UsuarioController extends Crud{
     private $usuarios;
@@ -39,7 +36,7 @@ class UsuarioController extends Crud{
         try {
             $decoded = JWT::decode($token, new Key($key, $algoritimo));
             $condicoes = ['id' => $decoded->sub];
-            $resultado = $this->select($this->usuarios, $condicoes);
+            $resultado = $this->select($this->usuarios->getTable(), $condicoes);
             $permissoes = $decoded->telas;
             if(!$resultado){
                 return ['status' => false, 'message' => 'Token inválido! Motivo: usuário invalido'];
@@ -55,7 +52,7 @@ class UsuarioController extends Crud{
     }
     public function login($senha,$lembrar) {
         $condicoes = ['email' => $this->usuarios->getEmail(),'ativo' => 1];
-        $resultado = $this->select($this->usuarios, $condicoes);
+        $resultado = $this->select($this->usuarios->getTable(), $condicoes);
         $checado=$lembrar? 60*12 : 3;
         $permissoes=[];
         $permissoesNomes=[];
@@ -66,10 +63,10 @@ class UsuarioController extends Crud{
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
         
-        $perfper = $this->select($this->PerfilPermissoes,['perfilid'=>$resultado[0]['perfilid']]);
+        $perfper = $this->select($this->PerfilPermissoes->getTable(),['perfilid'=>$resultado[0]['perfilid']]);
         
         foreach($perfper as $key => $value){
-            $permissoes[] = $this->select($this->permissoes,['id'=>$value['permissao_id']]);
+            $permissoes[] = $this->select($this->permissoes->getTable(),['id'=>$value['permissao_id']]);
         } 
         foreach ($permissoes as $permissaoArray) {
             foreach ($permissaoArray as $permissao) {
@@ -98,20 +95,15 @@ class UsuarioController extends Crud{
     public function recupasenha(){
         $novasenha = $this->gerarStringAlfanumerica(8);
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->select($this->usuarios, $condicoes);
+        $resultado = $this->select($this->usuarios->getTable(), $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Usuário não encontrado.'];
         }
         $email= new EnviaEMail();
         $dados=['email'=>$this->usuarios->getEmail(),'senha'=>$novasenha];
-        $emailuser = $this->usuarios->getEmail();
         if($email->recupera($dados)){
             $senhacriptografada=password_hash($novasenha, PASSWORD_DEFAULT);
-            $query = "UPDATE usuarios SET senha=:senha WHERE email=:email";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(':senha', $senhacriptografada);
-            $stmt->bindParam(':email', $emailuser);
-            $stmt->execute();
+            $this->update($this->usuarios->getTable(),['senha'=> $senhacriptografada],$condicoes);
             return ['status'=>true,'message'=>'E-mail enviado com sucesso!'];
         }else {
             return ['status'=>false,'message'=>'falha ao enviar email!'];
@@ -120,34 +112,35 @@ class UsuarioController extends Crud{
     public function alterarSenha($senhaantiga,$novasenha){
         $novasenha = $this->gerarStringAlfanumerica(8);
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->select($this->usuarios, $condicoes);
+        $resultado = $this->select($this->usuarios->getTable(), $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Usuário não encontrado.'];
         }
         if (!password_verify($senhaantiga, $resultado[0]['senha'])) {
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
-        if($this->update($this->usuarios,$condicoes)){
+        if($this->update($this->usuarios->getTable(),['senha'=> $novasenha],$condicoes)){
             return ['status' => true, 'message' => 'senha alterada com sucesso'];
         }
         
     }
     public function adicionarUsuario(){
-        return $this->insert($this->usuarios);
+        return $this->insert($this->usuarios->getTable(),$this->usuarios->toArray());
     }
-    
     public function listarUsuarios(){
-        $resultadon = $this->select($this->usuarios,[]);
-        if(!$resultadon){
+        $resultados = $this->select($this->usuarios->getTable(),[]);
+        if(empty($resultados)){
             return ['status' => false, 'message' => 'Não existe dados a retornar.'];
-        }else{
-            return $resultadon;
         }
+        foreach ($resultados as &$usuario) {
+            unset($usuario['senha']);
+        }
+        return $resultados;
     }
     
     public function buscarPorEmail(string $email){
         $condicoes = ['email' => $email];
-        $resultados = $this->select($this->usuarios, $condicoes);
+        $resultados = $this->select($this->usuarios->getTable(), $condicoes);
         $resultadon = count($resultados) > 0 ? $resultados[0] : false;
         if(!$resultadon){
             return ['status' => false, 'message' => 'Não existe dados a retornar.'];
@@ -157,7 +150,7 @@ class UsuarioController extends Crud{
     }
     public function bloquearPorEmail(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->update($this->usuarios, $condicoes);
+        $resultado = $this->update($this->usuarios->getTable(),['ativo'=>$this->usuarios->getAtivo()], $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
         }else{
@@ -167,7 +160,7 @@ class UsuarioController extends Crud{
     }
     public function AlterarPerfil(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->update($this->usuarios, $condicoes);
+        $resultado = $this->update($this->usuarios->getTable(), ['perfilid'=>$this->usuarios->setPerfilId()], $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
         }else{
@@ -177,7 +170,8 @@ class UsuarioController extends Crud{
     }
     public function buscarPorId(string $id){
         $condicoes = ['id' => $id];
-        $resultados = $this->select($this->usuarios, $condicoes);
+        $resultados = $this->select($this->usuarios->getTable(), $condicoes);
+        unset($resultados[0]['senha']);
         $resultadon = count($resultados) > 0 ? $resultados[0] : null;
         if(!$resultadon){
             return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
@@ -188,7 +182,7 @@ class UsuarioController extends Crud{
     
     public function removerUsuario(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->delete($this->usuarios, $condicoes);
+        $resultado = $this->delete($this->usuarios->getTable(), $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
         }else{

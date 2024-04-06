@@ -6,10 +6,14 @@ class Permissoes
 {
     private string $id;
     private string $nome;
-
+    private string $table='permissoes';
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+    }
+    public function getTable(): string
+    {
+        return $this->table;
     }
     public function getId(): string
     {

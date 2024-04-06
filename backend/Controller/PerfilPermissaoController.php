@@ -11,19 +11,17 @@ class PerfilPermissaoController extends Crud {
         parent::__construct();
         $this->perfilpermissoes = $perfPermissoes;
     }
-    
     public function addAssociarPermissaoPerfil(){
-        $resultado=$this->select($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
+        $resultado=$this->select($this->perfilpermissoes->getTable(),['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
         if(!$resultado){
-            $this->insert($this->perfilpermissoes);
+            $this->insert($this->perfilpermissoes->getTable(),['perfilid'=> $this->perfilpermissoes->getPerfilid(),'permissao_id'=>$this->perfilpermissoes->getPermissaoId() ]);
             return ['status' => true, 'message' => 'Inserido com sucesso.'];
         }else{
             return ['status' => false, 'message' => 'Associação já existe.'];
         }
-        
     }
     public function removerPermissao(){
-        $resultado=$this->delete($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
+        $resultado=$this->delete($this->perfilpermissoes->getTable(),['perfilid'=> $this->perfilpermissoes->getPerfilid(), 'permissao_id'=> $this->perfilpermissoes->getPermissaoId()]);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
         }else{
@@ -32,10 +30,10 @@ class PerfilPermissaoController extends Crud {
     }
 
     public function obterPermissoesDoPerfil($permissoes){
-         $resultado = $this->select($this->perfilpermissoes,['perfilid'=> $this->perfilpermissoes->getPerfilid()]);
+         $resultado = $this->select($this->perfilpermissoes->getTable(),['perfilid'=> $this->perfilpermissoes->getPerfilid()]);
          $dados=[];
          foreach($resultado as $key => $value) {
-            $dados[] = $this->select($permissoes,['id'=> $value['permissao_id']]);
+            $dados[] = $this->select($permissoes->getTable(),['id'=> $value['permissao_id']]);
          }
          return $dados;
     }

@@ -11,10 +11,14 @@ class Analiticos {
     private string $isMobile;
     private float $screenWidth;
     private float $screenHeight;
-
+    private string $table='analiticos';
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+    }
+    public function getTable(): string
+    {
+        return $this->table;
     }
     public function getId(): string
     {
@@ -95,6 +99,18 @@ class Analiticos {
         $this->screenHeight = $screenHeight;
 
         return $this;
+    }
+    public function toArray() {
+        return [
+           'id' => $this->id,
+           'visitor_id' => $this->visitor_id,
+           'x' => $this->x,
+           'y' => $this->y,
+           'time' => $this->time,
+           'isMobile' => $this->isMobile,
+           'screenWidth' => $this->screenWidth,
+           'screenHeight' => $this->screenHeight
+        ];
     }
     }
     

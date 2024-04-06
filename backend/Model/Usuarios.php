@@ -3,18 +3,23 @@
 namespace App\Model;
 use Ramsey\Uuid\Uuid;
 class Usuarios {
-    private $id;
+    private string $id;
     private string $nome;
     private string $email;
     private string $senha;
     private string $perfilid;
     private int $ativo;
+    private string $table='usuarios';
 
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
     }
-    public function getId(): int
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+    public function getId(): string
     {
         return $this->id;
     }
@@ -85,5 +90,15 @@ class Usuarios {
     public function setAtivo(int $ativo): void
     {
         $this->ativo = $ativo;
+    }
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'email' => $this->email,
+            'senha' => $this->senha,
+            'ativo' => $this->ativo,
+            'perfilid' => $this->perfilid
+        ];
     }
 }

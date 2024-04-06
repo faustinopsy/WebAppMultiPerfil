@@ -277,8 +277,9 @@ Atualiza registros existentes no banco de dados. Similar ao método insert, util
 - delete: 
 Remove registros do banco de dados com base nas condições fornecidas.
 
-## Uso de Reflexão: 
+## Uso de Reflexão (removido): 
 A classe Crud utiliza reflexão (a classe ReflectionClass do PHP) para manipular propriedades privadas dos objetos passados. Isso permite que a classe opere de maneira genérica com diferentes tipos de objetos, adequando-se às necessidades de várias tabelas e estruturas de dados.
+- removi a reflexão para deixar o código mais portável 
 
 # Reflexão em PHP
 Reflexão é um recurso de linguagens de programação que permite a um programa inspecionar e modificar sua estrutura e comportamento em tempo de execução. Em PHP, a reflexão é usada principalmente para:

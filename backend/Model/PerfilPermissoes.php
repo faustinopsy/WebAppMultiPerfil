@@ -5,7 +5,11 @@ namespace App\Model;
 class perfilpermissoes {
     private string $perfilid;
     private string $permissao_id;
-
+    private string $table='perfilpermissoes';
+    public function getTable(): string
+    {
+        return $this->table;
+    }
     public function getPerfilid(): string
     {
         return $this->perfilid;

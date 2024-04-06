@@ -8,10 +8,16 @@ class Saloes {
     private string $idusuario;
     private string $servicos;
     private int $ativo;
+    private string $table='saloes';
 
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+    }
+    
+    public function getTable(): string
+    {
+        return $this->table;
     }
     public function getId(): string
     {
@@ -65,6 +71,15 @@ class Saloes {
         $this->ativo = $ativo;
 
         return $this;
+    }
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'nome' => $this->nome,
+            'idusuario' => $this->idusuario,
+            'servicos' => $this->servicos,
+            'ativo' => $this->ativo
+        ];
     }
     }
     

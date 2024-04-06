@@ -12,19 +12,17 @@ class SaloesController extends Crud{
         $this->saloes=$saloes;
        
     }
-    
     public function adicionarSalao(){
-        $resultado=$this->select($this->saloes,['nome'=> $this->saloes->getNome()]);
+        $resultado=$this->select($this->saloes->getTable(),['nome'=> $this->saloes->getNome()]);
         if(!$resultado){
-            $this->insert($this->saloes);
-            $idSalao = $this->select($this->saloes,['nome'=> $this->saloes->getNome()]);
+            $this->insert($this->saloes->getTable(),$this->saloes->toArray());
+            $idSalao = $this->select($this->saloes->getTable(),['nome'=> $this->saloes->getNome()]);
             return ['status' => true, 'message' => 'Inserido com sucesso.', 'idSalao'=> $idSalao[0]['id'] ];
         }
         return ['status' => false, 'message' => 'Salão já existe.'];
     }
-    
     public function listarSalao(){
-        $resultado = $this->select($this->saloes,[]);
+        $resultado = $this->select($this->saloes->getTable(),[]);
         if(!$resultado){
             return $resultado;
         }else{
@@ -32,12 +30,12 @@ class SaloesController extends Crud{
         }
     }
     public function listarMeuSalao($enderecos){
-        $resultado = $this->select($this->saloes,['idusuario'=>$this->saloes->getIdusuario()]);
+        $resultado = $this->select($this->saloes->getTable(),['idusuario'=>$this->saloes->getIdusuario()]);
         if(!$resultado){
             return $resultado;
         }
         $condicoes = ['idsalao' => $resultado[0]["id"]];
-        $resultados = $this->select($enderecos, $condicoes);
+        $resultados = $this->select($enderecos->getTable(), $condicoes);
         $resultadon = count($resultados) > 0 ? ['endereco'=> true] : ['endereco'=> false] ;
         $novoarray[0] = array_merge($resultado[0],$resultadon);
         return $novoarray;
@@ -45,7 +43,7 @@ class SaloesController extends Crud{
     }
     public function buscarPorId(int $id){
         $condicoes = ['id' => $id];
-        $resultados = $this->select($this->saloes, $condicoes);
+        $resultados = $this->select($this->saloes->getTable(), $condicoes);
         $resultadon = count($resultados) > 0 ? $resultados[0] : null;
         if(!$resultadon){
             return ["status" => false, "Saloes" => $resultadon,"mensagem"=>"nenhum resultado encontrado"];
@@ -53,16 +51,14 @@ class SaloesController extends Crud{
             return $resultadon;
         }
     }
-    
     public function removerSalao(){
         $condicoes = ['id' => $this->saloes->getId()];
-        $resultado = $this->delete($this->saloes, $condicoes);
+        $resultado = $this->delete($this->saloes->getTable(), $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Não pode excluir.'];
         }else{
             return ['status' => true, 'message' => 'Excluido com sucesso.'];
         }
     }
-    
     
 }

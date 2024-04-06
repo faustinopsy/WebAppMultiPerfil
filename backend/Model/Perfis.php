@@ -5,10 +5,15 @@ use Ramsey\Uuid\Uuid;
 class Perfis {
     private $id;
     private string $nome;
-
+    private string $table='perfis';
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+    }
+    
+    public function getTable(): string
+    {
+        return $this->table;
     }
     public function getId(): string
     {

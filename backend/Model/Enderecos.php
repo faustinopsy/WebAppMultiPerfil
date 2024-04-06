@@ -13,10 +13,14 @@ class Enderecos {
     private string $longitude;
     private string $idusuario;
     private string $idsalao;
-
+    private string $table='enderecos';
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+    }
+    public function getTable(): string
+    {
+        return $this->table;
     }
     public function getId(): string
     {
@@ -117,6 +121,20 @@ class Enderecos {
         $this->idsalao = $idsalao;
 
         return $this;
+    }
+    public function toArray() {
+        return [
+           'id' => $this->id,
+           'cep' => $this->cep,
+           'rua' => $this->rua,
+           'bairro'=> $this->bairro,
+           'cidade' => $this->cidade,
+           'estado' => $this->estado,
+           'latitude'=> $this->latitude,
+           'longitude'=> $this->longitude,
+           'idusuario' => $this->idusuario,
+           'idsalao' => $this->idsalao
+        ];
     }
 }
     

@@ -44,10 +44,6 @@ function addUsuarioRoutes($router) {
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
-            $usuario->setId(0);
-            $usuario->setNome(0);
-            $usuario->setSenha(0);
-            $usuario->setPerfilId(0);
             $usuario->setEmail($body['email']);
             $usuario->setAtivo($body['chk']);
             $usuariosController = new UsuarioController($usuario);
@@ -59,12 +55,8 @@ function addUsuarioRoutes($router) {
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
-            $usuario->setId(0);
-            $usuario->setNome(0);
-            $usuario->setSenha(0);
             $usuario->setPerfilId($body['perf']);
             $usuario->setEmail($body['email']);
-            $usuario->setAtivo(0);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->AlterarPerfil(); 
             echo json_encode(['status' => $resultado]);
@@ -75,12 +67,8 @@ function addUsuarioRoutes($router) {
             $body = json_decode(file_get_contents('php://input'), true);
             $novasenha = $body['resenha'];
             $usuario = new Usuarios();
-            $usuario->setId(0);
-            $usuario->setNome(0);
             $usuario->setSenha($body['resenha']);
-            $usuario->setPerfilId(0);
             $usuario->setEmail($body['email']);
-            $usuario->setAtivo(0);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->Alterarsenha($body['senha'],$novasenha); 
             echo json_encode( $resultado);
@@ -100,7 +88,6 @@ function addUsuarioRoutes($router) {
             $usuario->setNome($body['nome']);
             $usuario->setEmail($body['email']);
             $usuario->setSenha($body['senha']);
-            
             $usuario->setAtivo(1);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->adicionarUsuario();
