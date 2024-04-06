@@ -105,7 +105,7 @@ class UsuarioController extends Crud{
         $email= new EnviaEMail();
         $dados=['email'=>$this->usuarios->getEmail(),'senha'=>$novasenha];
         $emailuser = $this->usuarios->getEmail();
-        if($email->recupasenha($dados)){
+        if($email->recupera($dados)){
             $senhacriptografada=password_hash($novasenha, PASSWORD_DEFAULT);
             $query = "UPDATE usuarios SET senha=:senha WHERE email=:email";
             $stmt = $this->conn->prepare($query);

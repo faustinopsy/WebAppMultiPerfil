@@ -9,7 +9,7 @@ class EnviaEMail{
         $config = require_once $configFilePath;
     }
 
-public function recupasenha($dados) {
+public function recupera($dados) {
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
