@@ -1,5 +1,9 @@
 # Multi perfil-permissoes
 Autenticação e Autorização (somente back via API)
+## ATENÇÂO
+> A branch "main/master" possui o gerenciamento de perfil e permissões baseado em banco de dados.
+> A branch "permissoes-em-classes" possui o gerenciamento de perfil e permissões baseado nas classes.
+
 Instruções:
 Clone o repositório e instale as dependências:
 ```
