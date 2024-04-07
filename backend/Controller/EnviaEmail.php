@@ -22,10 +22,15 @@ public function recupera($dados) {
 
         $mail->setFrom(MAIL_FROM, 'Nome do Remetente');
         $mail->addAddress($dados['email']); 
-
         $mail->isHTML(true);
-        $mail->Subject = 'Recupera Senha';
-        $mail->Body    = 'Sua senha temporária é: ' . $dados['senha'];
+        if(isset($dados['senha'])){
+            $mail->Subject = 'Recupera Senha';
+            $mail->Body    = 'Sua senha temporária é: ' . $dados['senha'];
+        }else{
+            $mail->Subject = 'Código de acesso';
+            $mail->Body    = 'o Código de acesso é: ' . $dados['codigo'];
+        }
+        
 
         $mail->send();
 

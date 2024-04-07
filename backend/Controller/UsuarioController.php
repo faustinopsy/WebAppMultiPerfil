@@ -7,7 +7,6 @@ use App\Model\Permissoes;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-
 class UsuarioController extends Crud{
     private $usuarios;
     private $PerfilPermissoes;
@@ -30,67 +29,16 @@ class UsuarioController extends Crud{
             return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
         }
     }
-    public function validarToken($token){
-        $key = TOKEN;
-        $algoritimo = 'HS256';
-        try {
-            $decoded = JWT::decode($token, new Key($key, $algoritimo));
-            $condicoes = ['id' => $decoded->sub];
-            $resultado = $this->select($this->usuarios->getTable(), $condicoes);
-            $permissoes = $decoded->telas;
-            if(!$resultado){
-                return ['status' => false, 'message' => 'Token inválido! Motivo: usuário invalido'];
-            }
-            if($_SERVER['SERVER_NAME']==$decoded->aud){
-                return ['status' => true, 'message' => 'Token válido!', 'telas'=>$permissoes];
-            }else{
-                return ['status' => false, 'message' => 'Token inválido! Motivo: dominio invalido' ];
-            }
-        } catch(Exception $e) {
-            return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
-        }
+    public function validarToken($token)
+    {
+        $authService = new TokenController();
+        return $authService->validarToken($this->usuarios,$token);
     }
-    public function login($senha,$lembrar) {
-        $condicoes = ['email' => $this->usuarios->getEmail(),'ativo' => 1];
-        $resultado = $this->select($this->usuarios->getTable(), $condicoes);
-        $checado=$lembrar? 60*12 : 3;
-        $permissoes=[];
-        $permissoesNomes=[];
-        if (!$resultado) {
-            return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
-        }
-        if (!password_verify($senha, $resultado[0]['senha'])) {
-            return ['status' => false, 'message' => 'Senha incorreta.'];
-        }
-        
-        $perfper = $this->select($this->PerfilPermissoes->getTable(),['perfilid'=>$resultado[0]['perfilid']]);
-        
-        foreach($perfper as $key => $value){
-            $permissoes[] = $this->select($this->permissoes->getTable(),['id'=>$value['permissao_id']]);
-        } 
-        foreach ($permissoes as $permissaoArray) {
-            foreach ($permissaoArray as $permissao) {
-                if (isset($permissao['nome'])) {
-                    $permissoesNomes[] = $permissao['nome'];
-                }
-            }
-        }
-        $key = TOKEN;
-        $local=$_SERVER['HTTP_HOST'];
-        $nome=$_SERVER['SERVER_NAME'];
-        $userid= $resultado[0]['id'];
-        $algoritimo='HS256';
-            $payload = [
-                "iss" =>  $local,
-                "aud" =>  $nome,
-                "iat" => time(),
-                "exp" => time() + (60 * $checado),  
-                "sub" => $userid,
-                'telas'=>$permissoesNomes
-            ];
-            
-            $jwt = JWT::encode($payload, $key,$algoritimo);
-        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'telas'=>$permissoesNomes];
+
+    public function login($senha, $lembrar)
+    {
+        $authService = new TokenController();
+        return $authService->login($this->usuarios, $senha, $lembrar);
     }
     public function recupasenha(){
         $novasenha = $this->gerarStringAlfanumerica(8);
@@ -108,6 +56,15 @@ class UsuarioController extends Crud{
         }else {
             return ['status'=>false,'message'=>'falha ao enviar email!'];
         }
+    }
+    public function verificacodigo($codigo){
+        $condicoes = ['email' => $this->usuarios->getEmail(), 'codigo'=> $codigo];
+        $resultado = $this->select('codigo', $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Token não encontrado.'];
+        }
+        return ['status'=>true,'message'=>'Código validado com sucesso!'];
+        
     }
     public function alterarSenha($senhaantiga,$novasenha){
         $novasenha = $this->gerarStringAlfanumerica(8);

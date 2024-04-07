@@ -13,6 +13,7 @@ import CadSaloes from './components/cad/CadSaloes.js';
 import CadEnderecos from './components/cad/CadEnderecos.js';
 import MapaSaloes from './components/screen/MapaSaloes.js';
 import MinhaArea from './components/screen/MinhaArea.js';
+import ConfirmToken from './components/screen/ConfirmToken.js';
 
 class App {
     constructor() {
@@ -82,6 +83,9 @@ getComponentInstance(link, params) {
                    
                 case 'login':
                     return new LoginScreen(this.navigate.bind(this));
+
+                case 'confirmatoken':
+                    return new ConfirmToken(this.navigate.bind(this),params);
                 
                 case 'experiencia':
                     return new HeatmapComponent();

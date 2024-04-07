@@ -125,6 +125,22 @@ function addUsuarioRoutes($router) {
                 exit;
             }
         });
+        $router->post('/verificacodigo', function () {
+            $body = json_decode(file_get_contents('php://input'), true);
+            $usuario = new Usuarios();
+            if (isset($body['email'])) {
+                $codigo = $body['codigo'];
+                $usuario->setEmail($body['email']);
+                $usuariosController = new UsuarioController($usuario);
+                $resultado = $usuariosController->verificacodigo($codigo);
+                if(!$resultado['status']){
+                    echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
+                   exit;
+                }
+                echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
+                exit;
+            }
+        });
         $router->delete('/', function () {
             $permitido = new TokenController();
             $permitido->autorizado();

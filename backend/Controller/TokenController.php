@@ -2,15 +2,94 @@
 
 namespace App\Controller;
 use App\Model\Usuarios;
-
+use App\Database\Crud;
+use Exception;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 class TokenController {
-
+    private $crud;
     private $ips_permitidos;
     private $origesPermitidas;
     public function __construct() {
         $this->ips_permitidos = ['::1', '123.123.123.124'];
         $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1'];
-        
+        $this->crud = new Crud();
+    }
+    public function validarToken($usuarios,$token){
+        $key = TOKEN;
+        $algoritimo = 'HS256';
+        try {
+            $decoded = JWT::decode($token, new Key($key, $algoritimo));
+            $condicoes = ['id' => $decoded->sub];
+            $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
+            $permissoes = $decoded->telas;
+            if(!$resultado){
+                return ['status' => false, 'message' => 'Token inválido! Motivo: usuário invalido'];
+            }
+            if($_SERVER['SERVER_NAME']==$decoded->aud){
+                return ['status' => true, 'message' => 'Token válido!', 'telas'=>$permissoes];
+            }else{
+                return ['status' => false, 'message' => 'Token inválido! Motivo: dominio invalido' ];
+            }
+        } catch(Exception $e) {
+            return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
+        }
+    }
+    public function login($usuarios,$senha,$lembrar) {
+        $condicoes = ['email' => $usuarios->getEmail(),'ativo' => 1];
+        $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
+        $checado=$lembrar? 60*12 : 3;
+        $permissoes=[];
+        $permissoesNomes=[];
+        if (!$resultado) {
+            return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
+        }
+        if (!password_verify($senha, $resultado[0]['senha'])) {
+            return ['status' => false, 'message' => 'Senha incorreta.'];
+        }
+        $perfilperm = $this->crud->select('perfilpermissoes',['perfilid'=>$resultado[0]['perfilid']]);
+        foreach($perfilperm as $key => $value){
+            $permissoes[] = $this->crud->select('permissoes',['id'=>$value['permissao_id']]);
+        } 
+        foreach ($permissoes as $permissaoArray) {
+            foreach ($permissaoArray as $permissao) {
+                if (isset($permissao['nome'])) {
+                    $permissoesNomes[] = $permissao['nome'];
+                }
+            }
+        }
+        $key = TOKEN;
+        $local=$_SERVER['HTTP_HOST'];
+        $nome=$_SERVER['SERVER_NAME'];
+        $userid= $resultado[0]['id'];
+        $algoritimo='HS256';
+            $payload = [
+                "iss" =>  $local,
+                "aud" =>  $nome,
+                "iat" => time(),
+                "exp" => time() + (60 * $checado),  
+                "sub" => $userid,
+                'telas'=>$permissoesNomes
+            ];
+            $this->enviarcodigo($usuarios);
+            $jwt = JWT::encode($payload, $key,$algoritimo);
+        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'telas'=>$permissoesNomes];
+    }
+    public function enviarcodigo($usuarios){
+        $codigo = $this->gerarStringAlfanumerica(8);
+        $condicoes = ['email' => $usuarios->getEmail()];
+        $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Usuário não encontrado.'];
+        }
+        $email= new EnviaEMail();
+        $dados=['email'=>$usuarios->getEmail(),'codigo'=>$codigo];
+        if($email->recupera($dados)){
+            $this->crud->insert('codigo',['email'=>$usuarios->getEmail(),'codigo'=> $codigo]);
+            return ['status'=>true,'message'=>'E-mail enviado com sucesso!'];
+        }else {
+            return ['status'=>false,'message'=>'falha ao enviar email!'];
+        }
     }
     public function autorizado(){
         header('Content-Type: application/json');
@@ -74,4 +153,14 @@ class TokenController {
         echo json_encode(['status' => true, 'message' => 'Token válido','telas'=>$validationResponse['telas']]);
         exit;
     }
+    public function gerarStringAlfanumerica($tamanho) {
+        $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $stringAleatoria = '';
+        for ($i = 0; $i < $tamanho; $i++) {
+            $index = rand(0, strlen($caracteres) - 1);
+            $stringAleatoria .= $caracteres[$index];
+        }
+        return $stringAleatoria;
+    }
+    
 }
