@@ -27,8 +27,8 @@ public function recupera($dados) {
             $mail->Subject = 'Recupera Senha';
             $mail->Body    = 'Sua senha temporária é: ' . $dados['senha'];
         }else{
-            $mail->Subject = 'Código de acesso';
-            $mail->Body    = 'o Código de acesso é: ' . $dados['codigo'];
+            $mail->Subject = 'Token de acesso';
+            $mail->Body    = 'o Token de acesso é: ' . $dados['codigo'];
         }
         
 

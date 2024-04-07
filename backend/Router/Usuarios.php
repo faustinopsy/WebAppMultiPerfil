@@ -4,8 +4,6 @@ namespace App\Router;
 use App\Controller\UsuarioController;
 use App\Model\Usuarios;
 use App\Controller\TokenController;
-use App\Controller\PerfilController;
-use App\Model\Perfis;
 function addUsuarioRoutes($router) {
     $router->mount('/Usuarios', function () use ($router) {
         $router->get('/', function () {
@@ -22,6 +20,27 @@ function addUsuarioRoutes($router) {
                 echo json_encode(["status" => true, "Usuarios" => $resultado]);
                 exit;
             }
+        });
+        $router->get('/perfil', function () {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $perfis = [
+                [
+                    'nome' => 'Comum',
+                    'descricao' => 'Perfil comum do usuário'
+                ],
+                [
+                    'nome' => 'Admin',
+                    'descricao' => 'Perfil de administrador'
+                ],
+                [
+                    'nome' => 'Full',
+                    'descricao' => 'Perfil de administrador completo'
+                ],
+            ];
+        
+            echo json_encode(['status' => true, 'perfis' => $perfis]);
+            
         });
 
         $router->get('/([a-z0-9_-]+)', function ($id) {
@@ -55,7 +74,7 @@ function addUsuarioRoutes($router) {
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
-            $usuario->setPerfilId($body['perf']);
+            $usuario->setPerfil($body['perf']);
             $usuario->setEmail($body['email']);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->AlterarPerfil(); 
@@ -67,27 +86,32 @@ function addUsuarioRoutes($router) {
             $body = json_decode(file_get_contents('php://input'), true);
             $novasenha = $body['resenha'];
             $usuario = new Usuarios();
-            $usuario->setSenha($body['resenha']);
+            $usuario->setSenha($novasenha);
             $usuario->setEmail($body['email']);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->Alterarsenha($body['senha'],$novasenha); 
             echo json_encode( $resultado);
         });
+        $router->put('/twofaUsuario', function () {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $body = json_decode(file_get_contents('php://input'), true);
+            $usuario = new Usuarios();
+            $usuario->setTwoFactor($body['chk']);
+            $usuario->setEmail($body['email']);
+           
+            $usuariosController = new UsuarioController($usuario);
+            $resultado = $usuariosController->ativarTwoFactor(); 
+            echo json_encode( $resultado);
+        });
         $router->post('/Registrar', function () {
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
-            $perfil = new Perfis();
-            $Perfilcontroller = new PerfilController($perfil);
-            $perfilresultado = $Perfilcontroller->listarPerfis();
-            foreach($perfilresultado as $value){
-                if ($value["nome"] === 'comum') { 
-                    $usuario->setPerfilId($value["id"]);
-                }
-                
-            }
             $usuario->setNome($body['nome']);
             $usuario->setEmail($body['email']);
             $usuario->setSenha($body['senha']);
+            $usuario->setPerfil('comum');
+            $usuario->setTwoFactor(0);
             $usuario->setAtivo(1);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->adicionarUsuario();
@@ -106,7 +130,7 @@ function addUsuarioRoutes($router) {
                     echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
                    exit;
                 }
-                echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message'],'user'=>$resultado['user'],'token'=>$resultado['token']]);
+                echo json_encode($resultado);
                 exit;
             }
         });

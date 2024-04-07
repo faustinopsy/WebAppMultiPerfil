@@ -50,7 +50,7 @@ export default class ConfirmTOken {
             <form class="w3-container" id="confirmtoken">
                 <div class="w3-section">
                     <label for="codigo">Código</label>
-                    <input class="w3-input w3-border w3-margin-bottom" type="text" id="codigo" placeholder="Insira o E-mail" required />
+                    <input class="w3-input w3-border w3-margin-bottom" type="text" id="codigo" placeholder="Insira o Token enviado por email" required />
                 </div>
                 <div class="w3-section">
                     <button type="submit" class="w3-button w3-block w3-green w3-section w3-padding" id="oonfirmarcodigo">Confirmar Código</button>

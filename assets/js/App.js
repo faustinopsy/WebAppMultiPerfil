@@ -21,6 +21,7 @@ class App {
         this.appElement = document.getElementById('app');
         this.tokenJWT = new ValidadorToken(this.navigate.bind(this),this.userLanguage);
         this.tokenJWT.init();
+        
     }
 
 navigate(link, params = {}) {
@@ -52,7 +53,7 @@ addPopStateListener() {
 
 
 getComponentInstance(link, params) {
-  
+    
             switch (link) {
                 case 'usuarios':
                     return new GerenciadorUsuarios();

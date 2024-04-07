@@ -443,11 +443,11 @@ a {
   }
   
   .slider.round {
-    border-radius: 34px;
+    border-radius: 0 10px 0 50px;
   }
   
   .slider.round:before {
-    border-radius: 50%;
+    border-radius: 0 50px 0 10px;
   }
   
 

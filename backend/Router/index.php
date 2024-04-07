@@ -7,9 +7,6 @@ use Bramus\Router\Router;
 $router = new Router();
 
 require __DIR__ . '/Usuarios.php';
-require __DIR__ . '/Perfis.php';
-require __DIR__ . '/Permissoes.php';
-require __DIR__ . '/PerfilPermissoes.php';
 require __DIR__ . '/Token.php';
 require __DIR__ . '/Saloes.php'; 
 require __DIR__ . '/Enderecos.php'; 
@@ -49,9 +46,6 @@ $router->before('GET', '/.*', function () {
 
 addTokenRoutes($router);    
 addUsuarioRoutes($router);
-addPerfilRoutes($router);
-addPermissaoRoutes($router);
-addAssociarRoutes($router);
 addSaloesRoutes($router);
 addEnderecosRoutes($router);
 addAnaliticosRoutes($router);

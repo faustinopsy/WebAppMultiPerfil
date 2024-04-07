@@ -2,21 +2,15 @@
 
 namespace App\Controller;
 use App\Database\Crud;
-use App\Model\PerfilPermissoes;
-use App\Model\Permissoes;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 class UsuarioController extends Crud{
     private $usuarios;
-    private $PerfilPermissoes;
-    private $permissoes;
     public function __construct($usuario)
     {
         parent::__construct();
         $this->usuarios=$usuario;
-        $this->PerfilPermissoes = new PerfilPermissoes();
-        $this->permissoes = new Permissoes();
     }
     public function idUser($token){
        
@@ -66,6 +60,15 @@ class UsuarioController extends Crud{
         return ['status'=>true,'message'=>'Código validado com sucesso!'];
         
     }
+    public function ativarTwoFactor(){
+        $condicoes = ['email' => $this->usuarios->getEmail()];
+        $resultado = $this->update($this->usuarios->getTable(),['twofactor'=>$this->usuarios->getTwoFactor()], $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return ['status' => true, 'message' => 'ativado com sucesso.'];
+        }
+    }
     public function alterarSenha($senhaantiga,$novasenha){
         $novasenha = $this->gerarStringAlfanumerica(8);
         $condicoes = ['email' => $this->usuarios->getEmail()];
@@ -113,11 +116,10 @@ class UsuarioController extends Crud{
         }else{
             return ['status' => true, 'message' => 'BLoqueado com sucesso.'];
         }
-        
     }
     public function AlterarPerfil(){
         $condicoes = ['email' => $this->usuarios->getEmail()];
-        $resultado = $this->update($this->usuarios->getTable(), ['perfilid'=>$this->usuarios->setPerfilId()], $condicoes);
+        $resultado = $this->update($this->usuarios->getTable(), ['perfil'=>$this->usuarios->getPerfil()], $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
         }else{

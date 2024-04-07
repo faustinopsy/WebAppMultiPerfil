@@ -3,19 +3,20 @@
 namespace App\Model;
 use Ramsey\Uuid\Uuid;
 class Usuarios {
-    private string $id;
-    private string $nome;
-    private string $email;
-    private string $senha;
-    private string $perfilid;
-    private int $ativo;
-    private string $table='usuarios';
+    protected string $id;
+    protected string $nome;
+    protected string $email;
+    protected string $senha;
+    protected string $perfil;
+    protected int $ativo;
+    protected int $twofactor;
+    protected string $table='usuarios';
 
-    public function __construct()
-    {
+    public function __construct(){
         $this->id = Uuid::uuid4()->toString();
     }
-    public function getTable(): string
+    public function getPermissoesTela() {
+    }    public function getTable(): string
     {
         return $this->table;
     }
@@ -69,27 +70,30 @@ class Usuarios {
         }
         $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
-    public function getPerfilId(): string
+    public function getPerfil(): string
     {
-        return $this->perfilid;
+        return $this->perfil;
     }
 
-    public function setPerfilId(string $perfilid): void
+    public function setPerfil(string $perfil): void
     {
-        if($perfilid == 0 || $perfilid=='0'){
-            $this->perfilid = '';
+        if($perfil == 0 || $perfil=='0'){
+            $this->perfil = '';
             return;
         }
-        $this->perfilid = $perfilid;
+        $this->perfil = $perfil;
     }
-    public function getAtivo(): int
-    {
+    public function getAtivo(): int{
         return $this->ativo;
     }
-
-    public function setAtivo(int $ativo): void
-    {
+    public function setAtivo(int $ativo): void{
         $this->ativo = $ativo;
+    }
+    public function getTwoFactor(): int{
+        return $this->twofactor;
+    }
+    public function setTwoFactor(int $twofactor): void{
+        $this->twofactor = $twofactor;
     }
     public function toArray() {
         return [
@@ -98,7 +102,8 @@ class Usuarios {
             'email' => $this->email,
             'senha' => $this->senha,
             'ativo' => $this->ativo,
-            'perfilid' => $this->perfilid
+            'perfil' => $this->perfil,
+            'twofactor' => $this->twofactor
         ];
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 06/04/2024 às 23:16
+-- Tempo de geração: 07/04/2024 às 19:23
 -- Versão do servidor: 8.0.33
 -- Versão do PHP: 8.2.15
 
@@ -2254,6 +2254,38 @@ INSERT INTO `analiticos` (`id`, `visitor_id`, `x`, `y`, `time`, `isMobile`, `scr
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `codigo`
+--
+
+CREATE TABLE `codigo` (
+  `idtoken` int NOT NULL,
+  `email` varchar(145) DEFAULT NULL,
+  `codigo` varchar(45) DEFAULT NULL,
+  `expira` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Despejando dados para a tabela `codigo`
+--
+
+INSERT INTO `codigo` (`idtoken`, `email`, `codigo`, `expira`) VALUES
+(1, 'rfaustino007@gmail.com', 'ir40VZJ2', '2024-04-06 21:39:27'),
+(2, 'rfaustino007@gmail.com', 'xpEa6Mk3', '2024-04-06 21:41:45'),
+(3, 'rfaustino007@gmail.com', 'uqpNeYUG', '2024-04-06 21:49:30'),
+(4, 'rfaustino007@gmail.com', '818-664', '2024-04-07 14:06:49'),
+(5, 'rfaustino007@gmail.com', '409-944', '2024-04-07 14:09:16'),
+(6, 'rfaustino007@gmail.com', '464-155', '2024-04-07 14:13:17'),
+(7, 'rfaustino007@gmail.com', '102-451', '2024-04-07 14:47:56'),
+(8, 'rfaustino007@gmail.com', '162-438', '2024-04-07 14:49:24'),
+(9, 'rfaustino007@gmail.com', '685-824', '2024-04-07 14:51:30'),
+(10, 'rfaustino007@gmail.com', '833-856', '2024-04-07 14:53:14'),
+(11, 'rfaustino007@gmail.com', '487-640', '2024-04-07 14:55:48'),
+(12, 'rfaustino007@gmail.com', '535-401', '2024-04-07 14:59:11'),
+(13, 'rfaustino007@gmail.com', '715-862', '2024-04-07 14:59:56');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `enderecos`
 --
 
@@ -2393,21 +2425,29 @@ CREATE TABLE `usuarios` (
   `nome` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `perfilid` char(40) DEFAULT NULL,
-  `ativo` int DEFAULT '1'
+  `perfil` varchar(55) DEFAULT NULL,
+  `ativo` int DEFAULT '1',
+  `twofactor` int DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `perfilid`, `ativo`) VALUES
-('73beb7a4-f6be-4caa-802d-551c39884afa', 'rodrigo faustino', 'rfaustino007@gmail.com', '$2y$10$VmPdlULkoewp8QJ0xBor1eH87n4aCbTlkz7/GuNG0tCMuoph4XrHe', '36da7520-db20-4963-807e-2d0a6ad938a2', 1),
-('e6a55708-eb89-41c2-857d-8a1bf8597e37', 'rodrigo', 'rodrigohipnose@gmail.com', 'QQZt2SBg', 'd448d881-a39a-4652-92b1-1359cd0dd8b2', 1);
+INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `perfil`, `ativo`, `twofactor`) VALUES
+('73beb7a4-f6be-4caa-802d-551c39884afa', 'rodrigo faustino', 'rfaustino007@gmail.com', '$2y$10$VmPdlULkoewp8QJ0xBor1eH87n4aCbTlkz7/GuNG0tCMuoph4XrHe', 'Admin', 1, 0),
+('91372d7c-ad1b-4ab8-9428-b0b7e038bece', 'rodrigo faustino', 'm4sk4r4d0@gmail.com', '$2y$10$BFt7BoLP279JCn4BkjF2gOHjmKOJ87/tWBbUuoByYTWiFhHqog1GW', 'comum', 1, 0),
+('e6a55708-eb89-41c2-857d-8a1bf8597e37', 'rodrigo', 'rodrigohipnose@gmail.com', '$2y$10$VmPdlULkoewp8QJ0xBor1eH87n4aCbTlkz7/GuNG0tCMuoph4XrHe', 'full', 1, 0);
 
 --
 -- Índices para tabelas despejadas
 --
+
+--
+-- Índices de tabela `codigo`
+--
+ALTER TABLE `codigo`
+  ADD PRIMARY KEY (`idtoken`);
 
 --
 -- Índices de tabela `enderecos`
@@ -2456,12 +2496,17 @@ ALTER TABLE `saloes`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `fk_perfil_idx` (`perfilid`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
 --
+
+--
+-- AUTO_INCREMENT de tabela `codigo`
+--
+ALTER TABLE `codigo`
+  MODIFY `idtoken` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
@@ -2492,12 +2537,6 @@ ALTER TABLE `perfilpermissoes`
 --
 ALTER TABLE `saloes`
   ADD CONSTRAINT `fk_proprietario` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`id`);
-
---
--- Restrições para tabelas `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `fk_perfil` FOREIGN KEY (`perfilid`) REFERENCES `perfis` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

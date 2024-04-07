@@ -6,6 +6,7 @@ use App\Database\Crud;
 use Exception;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use App\Service\UsuarioFactory;
 class TokenController {
     private $crud;
     private $ips_permitidos;
@@ -47,17 +48,13 @@ class TokenController {
         if (!password_verify($senha, $resultado[0]['senha'])) {
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
-        $perfilperm = $this->crud->select('perfilpermissoes',['perfilid'=>$resultado[0]['perfilid']]);
-        foreach($perfilperm as $key => $value){
-            $permissoes[] = $this->crud->select('permissoes',['id'=>$value['permissao_id']]);
-        } 
-        foreach ($permissoes as $permissaoArray) {
-            foreach ($permissaoArray as $permissao) {
-                if (isset($permissao['nome'])) {
-                    $permissoesNomes[] = $permissao['nome'];
-                }
-            }
-        }
+        $twofactor = $resultado[0]['twofactor'];
+        $perfil = UsuarioFactory::criarUsuario(
+            $resultado[0]['perfil']
+        );
+    
+        $permissoes = $perfil->getPermissoesTela();
+
         $key = TOKEN;
         $local=$_SERVER['HTTP_HOST'];
         $nome=$_SERVER['SERVER_NAME'];
@@ -69,14 +66,16 @@ class TokenController {
                 "iat" => time(),
                 "exp" => time() + (60 * $checado),  
                 "sub" => $userid,
-                'telas'=>$permissoesNomes
+                'telas'=>$permissoes
             ];
-            $this->enviarcodigo($usuarios);
+            if($twofactor===1){
+                $this->enviarcodigo($usuarios);
+            }
             $jwt = JWT::encode($payload, $key,$algoritimo);
-        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'telas'=>$permissoesNomes];
+        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'twofactor'=> $twofactor,'telas'=>$permissoesNomes];
     }
     public function enviarcodigo($usuarios){
-        $codigo = $this->gerarStringAlfanumerica(8);
+        $codigo = $this->gerarStringAlfanumerica(6);
         $condicoes = ['email' => $usuarios->getEmail()];
         $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
         if(!$resultado){
@@ -154,12 +153,24 @@ class TokenController {
         exit;
     }
     public function gerarStringAlfanumerica($tamanho) {
+        $numeros = '0123456789';
         $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $stringAleatoria = '';
-        for ($i = 0; $i < $tamanho; $i++) {
-            $index = rand(0, strlen($caracteres) - 1);
-            $stringAleatoria .= $caracteres[$index];
+        if($tamanho > 6){
+            for ($i = 0; $i < $tamanho; $i++) {
+                $index = rand(0, strlen($caracteres) - 1);
+                $stringAleatoria .= $caracteres[$index];
+            }
+        }else{
+            for ($i = 0; $i < $tamanho; $i++) {
+                $index = rand(0, strlen($numeros) - 1);
+                $stringAleatoria .= $numeros[$index];
+                if($i==2){
+                    $stringAleatoria .='-';
+                }
+            }
         }
+        
         return $stringAleatoria;
     }
     

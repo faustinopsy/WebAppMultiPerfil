@@ -1,5 +1,7 @@
 # Multi perfil-permissoes
 Autenticação e Autorização (somente back via API)
+# Multi perfil-permissoes
+Autenticação e Autorização (somente back via API)
 ## ATENÇÂO
 > A branch "main/master" possui o gerenciamento de perfil e permissões baseado em banco de dados.
 > A branch "permissoes-em-classes" possui o gerenciamento de perfil e permissões baseado nas classes.
@@ -14,12 +16,7 @@ composer install
 # Mini-Documentação do Sistema
 - index.php
 Serve como o ponto de entrada principal da aplicação. Roteia as requisições para os respectivos controladores.
-- PerfilPermissoes.php
-Gerencia a relação entre perfis e permissões. Contém lógica para associar ou desassociar permissões de um perfil.
-- Perfis.php
-Responsável por operações relacionadas a perfis de usuário, como criação, edição e remoção de perfis.
-- Permissoes.php
-Lida com a gestão de permissões, incluindo a criação e remoção de permissões.
+Aqui houve uma alteração para incluir a classe usuariosFactory que agora é responsavel por gerenciar os perfis com base nas classes Usuario comum, Usuario Admin e Administrador Full, onde nelas são gerenciadas as permissoes, dando uma independência maior em relação ao banco de dados, agora não é mais necessaria as tabelas perfil, permissoes e perfilpermissao como a outra branch principal
 - Token.php
 Central para a geração e validação de tokens. Essencial para autenticação e autorização no sistema.
 - Usuarios.php
@@ -207,47 +204,6 @@ N/A
 }
 ```
 
-## Associar_perfil_permissao
-**Method:** POST
-
-**URL:** http://localhost/backend/Router/Associar
-
-**Headers:**
-- Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QiLCJpYXQiOjE3MDY3OTAxMzYsImV4cCI6MTcwNjgzMzMzNiwic3ViIjoxLCJ0ZWxhcyI6WyJpbmRleCIsInByb2R1dG9zIiwiYWRtaW4iLCJ1c3VhcmlvcyIsInNhbG9lcyJdfQ.kZI3h-PjZn9aGZ4Q8d5nolmzM0CH68hSbz6ZhHFOw10"
-
-**Body:**
-```json
-{
-    "perfilId":"2",
-    "permissao_id":"1"
-}
-```
-
-## list_perfil_permissao
-**Method:** GET
-
-**URL:** http://localhost/backend/Router/Associar/2
-
-**Headers:**
-- Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QiLCJpYXQiOjE3MDY3OTAxMzYsImV4cCI6MTcwNjgzMzMzNiwic3ViIjoxLCJ0ZWxhcyI6WyJpbmRleCIsInByb2R1dG9zIiwiYWRtaW4iLCJ1c3VhcmlvcyIsInNhbG9lcyJdfQ.kZI3h-PjZn9aGZ4Q8d5nolmzM0CH68hSbz6ZhHFOw10"
-
-**Body:**
-N/A
-
-## Deletar_Associação
-**Method:** DELETE
-
-**URL:** http://localhost/backend/Router/Associar/4
-
-**Headers:**
-- Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOiJsb2NhbGhvc3QiLCJpYXQiOjE3MDY3OTAxMzYsImV4cCI6MTcwNjgzMzMzNiwic3ViIjoxLCJ0ZWxhcyI6WyJpbmRleCIsInByb2R1dG9zIiwiYWRtaW4iLCJ1c3VhcmlvcyIsInNhbG9lcyJdfQ.kZI3h-PjZn9aGZ4Q8d5nolmzM0CH68hSbz6ZhHFOw10"
-
-**Body:**
-```json
-{
-    "permissao_id":"5"
-}
-```
 
 # Aspectos epeciais
 

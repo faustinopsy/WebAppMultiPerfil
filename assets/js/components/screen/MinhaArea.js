@@ -29,6 +29,9 @@ export default class MinhaArea {
             
         }
     }
+    async twofaUsuario(email,chk) {
+        return await this.buscaApi.fetchApi(`Usuarios/twofaUsuario`, 'PUT', { email, chk });
+    }
     renderUsers(usuario) {
         const divUser = document.querySelector('.main');
             this.usuario_perfil= usuario.perfilid;
@@ -37,8 +40,7 @@ export default class MinhaArea {
             container.innerHTML = `
                 <div class="w3-container">
                     <h3>Dados no banco</h3>
-                    <p>Id: ${usuario.id}</p>
-                    <h3>Nome: ${usuario.nome}</h3>
+                    <h4>Nome: ${usuario.nome}</h4>
                     <p id="emailcard" data-email="${usuario.email}">Email: ${usuario.email}</p>
                 </div>
                 <div class="w3-section">
@@ -52,7 +54,33 @@ export default class MinhaArea {
                 <button type="submit" class="w3-button w3-block w3-green w3-section w3-padding">Alterar a senha</button>
                 <p id="message"></p>
             `;
-            
+            const switchLabel = document.createElement('label');
+            switchLabel.classList.add('switch');
+            const ativeBtn = document.createElement('input');
+            ativeBtn.id = "myCheck";
+            ativeBtn.type = "checkbox";
+            if(usuario.twofactor===1){
+                ativeBtn.checked = true
+            }
+            ativeBtn.addEventListener('click', async () => {
+                if (ativeBtn.checked) {
+                    const result = await this.twofaUsuario(usuario.email, 1);
+                    Swal.fire("Sucesso!", "2fa-email Ativado!", "sucess");
+                } else {
+                    const result = await this.twofaUsuario(usuario.email, 0);
+                    Swal.fire("Sucesso!", "2fa-email Desativado ", "sucess");
+                }
+            });
+            const hr = document.createElement('hr');
+            const span = document.createElement('span');
+            span.innerText = "2fa-email"
+            const sliderSpan = document.createElement('span');
+            sliderSpan.classList.add('slider', 'round');
+            switchLabel.appendChild(ativeBtn);
+            switchLabel.appendChild(sliderSpan);
+            container.appendChild(hr);
+            container.appendChild(span);
+            container.appendChild(switchLabel);
             divUser.appendChild(container);  
             
     }

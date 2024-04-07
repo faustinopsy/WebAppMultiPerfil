@@ -4,11 +4,15 @@ export default class GerenciadorUsuarios {
     constructor() {
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
         this.usuario_perfil=null;
+        
     }
 
     async init() {
         await this.buscaUsers();
         await this.populatePerfis();
+    }
+    async getPerfis() {
+        return await this.buscaApi.fetchApi('Usuarios/perfil', 'GET');
     }
     async inativeUsuario(email,chk) {
         return await this.buscaApi.fetchApi(`Usuarios`, 'PUT', { email,chk });
@@ -44,15 +48,13 @@ export default class GerenciadorUsuarios {
                     <h3>Nome: ${usuario.nome}</h3>
                     <p id="emailcard" data-email="${usuario.email}">Email: ${usuario.email}</p>
                 </div>
-                <label for="perfilSelect">Perfil:</label>
+                <label for="perfilSelect">Perfil Atual: ${usuario.perfil}</label>
                 <select class="perfilSelect w3-select" required>
                     <option value="">Selecione</option>
                 </select>
             `;
             const switchLabel = document.createElement('label');
             switchLabel.classList.add('switch');
-
-            
             const ativeBtn = document.createElement('input');
             ativeBtn.id = "myCheck";
             ativeBtn.type = "checkbox";
@@ -98,9 +100,7 @@ export default class GerenciadorUsuarios {
 
         
     }
-    async getPerfis() {
-        return await this.buscaApi.fetchApi('Perfil', 'GET');
-    }
+    
     async populatePerfis() {
         const perfis = await this.getPerfis();
         const select = document.querySelectorAll('.perfilSelect');
@@ -108,17 +108,18 @@ export default class GerenciadorUsuarios {
             while (select.options.length > 1) {
                 select.remove(1);
             }
-        perfis.forEach(perfil => {
-            const option = document.createElement('option');
-            option.value = perfil.id;
-            option.textContent = perfil.nome;
-            select.appendChild(option);
+        perfis.perfis.forEach(perfil => {
+                const option = document.createElement('option');
+                option.value = perfil.nome;
+                option.textContent = perfil.nome;
+                select.appendChild(option);
         });
         select.addEventListener('change', async (event) => {
             let email = document.getElementById("emailcard");
             const result = await this.perfilUsuario(email.dataset.email,event.target.value);
             if (result.status) {
                 Swal.fire("Sucesso!", `${result.status.message}`, "sucess");
+                location.reload();
             }
         });
     });
