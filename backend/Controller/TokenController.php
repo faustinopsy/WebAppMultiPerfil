@@ -41,13 +41,14 @@ class TokenController {
         $checado=$lembrar? 60*12 : 3;
         $permissoes=[];
         $permissoesNomes=[];
+        $twofactor = $resultado[0]['twofactor'];
         if (!$resultado) {
             return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
         }
         if (!password_verify($senha, $resultado[0]['senha'])) {
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
-        $perfilperm = $this->crud->select('perfilpermissoes',['perfilid'=>$resultado[0]['perfilid']]);
+        $perfilperm = $this->crud->select('perfilpermissoes',['perfilid'=>$resultado[0]['perfil']]);
         foreach($perfilperm as $key => $value){
             $permissoes[] = $this->crud->select('permissoes',['id'=>$value['permissao_id']]);
         } 
@@ -71,9 +72,11 @@ class TokenController {
                 "sub" => $userid,
                 'telas'=>$permissoesNomes
             ];
-            $this->enviarcodigo($usuarios);
+            if( $twofactor===1){
+                $this->enviarcodigo($usuarios);
+            }
             $jwt = JWT::encode($payload, $key,$algoritimo);
-        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'telas'=>$permissoesNomes];
+        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'twofactor'=> $twofactor,'telas'=>$permissoesNomes];
     }
     public function enviarcodigo($usuarios){
         $codigo = $this->gerarStringAlfanumerica(8);

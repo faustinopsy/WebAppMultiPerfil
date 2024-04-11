@@ -11,8 +11,16 @@ export default class LoginScreen {
             const data = await this.buscaApi.fetchApi('Usuarios/login', 'POST', { email, senha: password, lembrar });
             if (data.status) {
                 data.email = email;
-                this.navigate('confirmatoken',data); 
-                //location.reload();
+                if(data.twofactor==1){
+                    this.navigate('confirmatoken',data); 
+                }else{
+                    sessionStorage.setItem('token', data.token);
+                    sessionStorage.setItem('user', data.user);
+                    this.navigate('admin'); 
+                    location.reload();
+                }
+               
+                
             } else {
                 this.displayMessage("Login falhou:\n " + data.message);
             }

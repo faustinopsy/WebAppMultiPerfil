@@ -7,7 +7,7 @@ class Usuarios {
     private string $nome;
     private string $email;
     private string $senha;
-    private string $perfilid;
+    private string $perfil;
     private int $ativo;
     private string $table='usuarios';
 
@@ -69,18 +69,18 @@ class Usuarios {
         }
         $this->senha = password_hash($senha, PASSWORD_DEFAULT);
     }
-    public function getPerfilId(): string
+    public function getPerfil(): string
     {
-        return $this->perfilid;
+        return $this->perfil;
     }
 
-    public function setPerfilId(string $perfilid): void
+    public function setPerfil(string $perfil): void
     {
-        if($perfilid == 0 || $perfilid=='0'){
-            $this->perfilid = '';
+        if($perfil == 0 || $perfil=='0'){
+            $this->perfil = '';
             return;
         }
-        $this->perfilid = $perfilid;
+        $this->perfil = $perfil;
     }
     public function getAtivo(): int
     {
@@ -98,7 +98,7 @@ class Usuarios {
             'email' => $this->email,
             'senha' => $this->senha,
             'ativo' => $this->ativo,
-            'perfilid' => $this->perfilid
+            'perfil' => $this->perfil
         ];
     }
 }

@@ -13,7 +13,8 @@ class EnderecosController extends Crud{
     }
     
     public function adicionarEndereco(){
-        if($this->insert($this->enderecos->getTable(),[$this->enderecos->toArray()])){
+        $resultado = $this->insert($this->enderecos->getTable(),$this->enderecos->toArray());
+        if($resultado){
             return ['status' => true, 'message' => 'Inserido com sucesso.'];
         }
     }

@@ -55,7 +55,7 @@ function addUsuarioRoutes($router) {
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();
-            $usuario->setPerfilId($body['perf']);
+            $usuario->setPerfil($body['perf']);
             $usuario->setEmail($body['email']);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->AlterarPerfil(); 
@@ -81,7 +81,7 @@ function addUsuarioRoutes($router) {
             $perfilresultado = $Perfilcontroller->listarPerfis();
             foreach($perfilresultado as $value){
                 if ($value["nome"] === 'comum') { 
-                    $usuario->setPerfilId($value["id"]);
+                    $usuario->setPerfil($value["id"]);
                 }
                 
             }
@@ -106,7 +106,7 @@ function addUsuarioRoutes($router) {
                     echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
                    exit;
                 }
-                echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message'],'user'=>$resultado['user'],'token'=>$resultado['token']]);
+                echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message'],'user'=>$resultado['user'],'token'=>$resultado['token'],'twofactor'=> $resultado['twofactor']]);
                 exit;
             }
         });
