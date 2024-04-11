@@ -81,6 +81,15 @@ class UsuarioController extends Crud{
         }
         
     }
+    public function ativarTwoFactor(){
+        $condicoes = ['email' => $this->usuarios->getEmail()];
+        $resultado = $this->update($this->usuarios->getTable(),['twofactor'=>$this->usuarios->getTwoFactor()], $condicoes);
+        if(!$resultado){
+            return ['status' => false, 'message' => 'Nenhum resultado a retornar'];
+        }else{
+            return ['status' => true, 'message' => 'ativado com sucesso.'];
+        }
+    }
     public function adicionarUsuario(){
         return $this->insert($this->usuarios->getTable(),$this->usuarios->toArray());
     }

@@ -110,6 +110,19 @@ function addUsuarioRoutes($router) {
                 exit;
             }
         });
+        
+        $router->put('/twofaUsuario', function () {
+            $permitido = new TokenController();
+            $permitido->autorizado();
+            $body = json_decode(file_get_contents('php://input'), true);
+            $usuario = new Usuarios();
+            $usuario->setTwoFactor($body['chk']);
+            $usuario->setEmail($body['email']);
+        
+            $usuariosController = new UsuarioController($usuario);
+            $resultado = $usuariosController->ativarTwoFactor(); 
+            echo json_encode( $resultado);
+        });
         $router->post('/recuperarsenha', function () {
             $body = json_decode(file_get_contents('php://input'), true);
             $usuario = new Usuarios();

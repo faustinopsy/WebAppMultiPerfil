@@ -9,6 +9,7 @@ class Usuarios {
     private string $senha;
     private string $perfil;
     private int $ativo;
+    private string $twofactor;
     private string $table='usuarios';
 
     public function __construct()
@@ -91,6 +92,15 @@ class Usuarios {
     {
         $this->ativo = $ativo;
     }
+    public function getTwofactor(): string
+    {
+        return $this->twofactor;
+    }
+
+    public function setTwofactor(int $twofactor): void
+    {
+        $this->twofactor = $twofactor;
+    }
     public function toArray() {
         return [
             'id' => $this->id,
@@ -98,7 +108,8 @@ class Usuarios {
             'email' => $this->email,
             'senha' => $this->senha,
             'ativo' => $this->ativo,
-            'perfil' => $this->perfil
+            'perfil' => $this->perfil,
+            'twofactor' => $this->twofactor
         ];
     }
 }
