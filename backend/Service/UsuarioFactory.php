@@ -10,8 +10,12 @@ class UsuarioFactory {
         switch ($tipoPerfil) {
             case 'comum':
                 return new UsuarioComum();
+            case '36da7520-db20-4963-807e-2d0a6ad938a2':
+                return new UsuarioComum();
             case 'admin':
                 return new UsuarioAdmin();
+            case 'd448d881-a39a-4652-92b1-1359cd0dd8b2':
+                return new AdministradorFull();
             case 'full':
                 return new AdministradorFull();
             default:
