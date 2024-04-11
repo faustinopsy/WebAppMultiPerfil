@@ -4,13 +4,18 @@ Autenticação e Autorização (somente back via API)
 > A branch "main/master" possui o gerenciamento de perfil e permissões baseado em banco de dados.
 > A branch "permissoes-em-classes" possui o gerenciamento de perfil e permissões baseado nas classes.
 
-Instruções:
+### Instruções:
 Clone o repositório e instale as dependências:
 ```
 git clone https://github.com/faustinopsy/WebAppMultiPerfil.git
 
+```
+- instale o composer e execute o comando na raiz do projeto
+```
 composer install
 ```
+- se quiser ativar o envio do token por email como 2fa configure o arquivo database/configemail.php com as credenciais do seu servidor
+
 # Mini-Documentação do Sistema
 - index.php
 Serve como o ponto de entrada principal da aplicação. Roteia as requisições para os respectivos controladores.
