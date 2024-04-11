@@ -7,7 +7,7 @@ class UsuarioComum extends Usuarios {
         $this->id = Uuid::uuid4()->toString();
     }
     public function getPermissoesTela() {
-        return ['mapa', 'minhaarea'];
+        return ['mapa', 'minhaarea', 'gerirsaloes'];
     }
 }
 
