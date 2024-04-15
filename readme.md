@@ -1,4 +1,8 @@
 # Multi perfil-permissoes
+usuário admin: admin@gmail.com
+senha: 123
+usuário comum: comum@gmail.com
+senha: 123
 Autenticação e Autorização (somente back via API)
 # Multi perfil-permissoes
 Autenticação e Autorização (somente back via API)
