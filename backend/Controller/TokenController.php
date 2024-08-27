@@ -13,7 +13,7 @@ class TokenController {
     private $origesPermitidas;
     public function __construct() {
         $this->ips_permitidos = ['::1', '123.123.123.124'];
-        $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1'];
+        $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1','https://faustinopsy.com','https://mapadocrime.faustinopsy.com'];
         $this->crud = new Crud();
     }
     public function validarToken($usuarios,$token){
@@ -97,8 +97,8 @@ class TokenController {
         header('Access-Control-Allow-Methods: OPTIONS, GET, POST, PUT, DELETE');
         header('Access-Control-Allow-Headers: Content-Type');
         header('Cache-Control: no-cache, no-store, must-revalidate');
-        //$this->verOrigem();
-        $this->verIP();
+        $this->verOrigem();
+        //$this->verIP();
         $this->Token();
     }
     public function verOrigem(){

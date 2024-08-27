@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=faust537/public_html/mapadocrime.faustinopsy.com
+    - /bin/cp -a * $DEPLOYPATH
