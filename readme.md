@@ -1,8 +1,8 @@
 # Multi perfil-permissoes
-usuário admin: admin@gmail.com
-senha: 123
-usuário comum: comum@gmail.com
-senha: 123
+- usuário admin: admin@gmail.com
+- senha: 123
+- usuário comum: comum@gmail.com
+- senha: 123
 Autenticação e Autorização (somente back via API)
 # Multi perfil-permissoes
 Autenticação e Autorização (somente back via API)
@@ -16,6 +16,9 @@ Clone o repositório e instale as dependências:
 git clone https://github.com/faustinopsy/WebAppMultiPerfil.git
 
 composer install
+
+
+php -S localhost:8080
 ```
 # Mini-Documentação do Sistema
 - index.php
