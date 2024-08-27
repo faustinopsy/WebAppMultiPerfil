@@ -38,9 +38,9 @@ function addAnaliticosRoutes($router) {
             $body = json_decode(file_get_contents('php://input'), true);
             $analitico = new Analiticos();
             foreach ($body as $movement) {
-                $timestampInSeconds = $movement['time'] / 1000;
+                //$timestampInSeconds = $movement['time'] / 1000;
                 $mobile = $movement['isMobile'] ? 1 : 0;
-                $mysqlDateTime = date('Y-m-d H:i:s', $timestampInSeconds);
+                $mysqlDateTime = date('Y-m-d H:i:s', $movement['time']);
                 $analitico->setVisitorId($movement['visitor_id']);
                 $analitico->setX(floatval($movement['x']));
                 $analitico->setY(floatval($movement['y']));

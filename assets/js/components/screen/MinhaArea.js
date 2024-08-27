@@ -2,12 +2,14 @@ import BuscaApi from '../lib/BuscaApiG.js';
 
 export default class MinhaArea {
     constructor() {
-        this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
-        this.usuario_perfil = sessionStorage.getItem('user');
+        this.token = sessionStorage.getItem('token')
+        this.buscaApi = new BuscaApi(this.token);
+        const payload = JSON.parse(atob(this.token.split('.')[1]));
+        this.usuario_perfil = payload.sub;
     }
 
     async init() {
-        await this.buscaUser(this.usuario_perfil);
+        await this.buscaUser();
         this.iniciaTrocaSenha();
     }
     

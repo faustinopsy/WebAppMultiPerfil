@@ -25,7 +25,8 @@ export default class ValidadorToken {
         try {
             const data = await this.buscaApi.fetchApi('token', 'GET');
             if(data.status) {
-                this.telasPermitidas = data.telas; 
+                const payload = JSON.parse(atob(this.token.split('.')[1]));
+                this.telasPermitidas = payload.telas; 
                 this.initializeNavbar();
             } else {
                 sessionStorage.removeItem('token');

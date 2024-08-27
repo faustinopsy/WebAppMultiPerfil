@@ -52,12 +52,15 @@ class UsuarioController extends Crud{
         }
     }
     public function verificacodigo($codigo){
+        $authService = new TokenController();
         $condicoes = ['email' => $this->usuarios->getEmail(), 'codigo'=> $codigo];
+        $login = $this->select($this->usuarios->getTable(), ['email' => $this->usuarios->getEmail()]);
         $resultado = $this->select('codigo', $condicoes);
         if(!$resultado){
             return ['status' => false, 'message' => 'Token não encontrado.'];
         }
-        return ['status'=>true,'message'=>'Código validado com sucesso!'];
+        $jwt = $authService->gerarToken(true, $login);
+        return ['status'=>true,'token'=>$jwt, 'message'=>'Código validado com sucesso!'];
         
     }
     public function ativarTwoFactor(){

@@ -1,10 +1,13 @@
 import BuscaApi from '../lib/BuscaApiG.js';
+import MouseMovementTracker from './../lib/MouseMovementTracker.js';
 export default class MapaSaloes {
     constructor(navigateCallback) {
         this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi(sessionStorage.getItem('token'));
         this.mapa = null; 
         this.navbar = null;
+        this.mouseTracker = new MouseMovementTracker();
+        this.mouseTracker.init();
         this.init();
     }
 
@@ -49,6 +52,7 @@ export default class MapaSaloes {
     async buscaSaloesGEO(position) {
         let lat = position.coords.latitude.toFixed(5);
         let long = position.coords.longitude.toFixed(5);
+    
         let query = `Enderecos/geo?lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`;
     
         try {

@@ -4,8 +4,6 @@ export default class ConfirmTOken {
     constructor(navigateCallback,data) {
         this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi();
-        this.token =  data.token;
-        this.user =  data.user;
         this.email = data.email;
     }
 
@@ -16,9 +14,8 @@ export default class ConfirmTOken {
 
             if (data.status) {
                 Swal.fire("Alerta!","Confirmado", "info");
-                sessionStorage.setItem('token', this.token);
-                sessionStorage.setItem('user', this.user);
-                this.navigate('admin'); 
+                sessionStorage.setItem('token', data.token);
+                this.navigate('mapa'); 
                 location.reload();
             } else {
                 this.displayMessage("Falhou: " + data.message);

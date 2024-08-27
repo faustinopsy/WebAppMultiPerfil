@@ -5,9 +5,26 @@ export default class LoginScreen {
         this.navigate = navigateCallback;
         this.buscaApi = new BuscaApi();
     }
-
+    alerta(){
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            }
+          });
+          Toast.fire({
+            icon: "success",
+            title: "Verificando..."
+          });
+    }
     async login(email, password, lembrar) {
         try {
+            this.alerta()
             const data = await this.buscaApi.fetchApi('Usuarios/login', 'POST', { email, senha: password, lembrar });
             if (data.status) {
                 if (data.twofactor===1) {
@@ -16,8 +33,7 @@ export default class LoginScreen {
                  } else{
                     Swal.fire("Alerta!","Confirmado", "info");
                     sessionStorage.setItem('token', data.token);
-                    sessionStorage.setItem('user', data.user);
-                    this.navigate('admin'); 
+                    this.navigate('mapa'); 
                     location.reload();
                  }
                 

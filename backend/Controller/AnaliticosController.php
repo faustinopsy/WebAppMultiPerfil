@@ -12,7 +12,7 @@ class AnaliticosController extends Crud{
        
     }
     public function adicionarAnalitico(){
-        return $this->insert($this->analitico->getTable(),[$this->analitico->toArray()]);
+        return $this->insert($this->analitico->getTable(),$this->analitico->toArray());
     }
     public function listarAnalitico(){
         return $this->select($this->analitico->getTable(),[]);

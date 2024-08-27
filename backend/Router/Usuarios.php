@@ -161,7 +161,7 @@ function addUsuarioRoutes($router) {
                     echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
                    exit;
                 }
-                echo json_encode(['status' => $resultado['status'], 'message' => $resultado['message']]);
+                echo json_encode($resultado);
                 exit;
             }
         });

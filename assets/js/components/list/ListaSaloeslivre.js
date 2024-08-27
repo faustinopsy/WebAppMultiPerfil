@@ -25,8 +25,8 @@ export default class ListaSaloes {
         }
     }
     async buscaSaloesGEO(position) {
-        let lat = position.coords.latitude.toFixed(5);; 
-        let long = position.coords.longitude.toFixed(5);; 
+        let lat = position.coords.latitude.toFixed(5);
+        let long = position.coords.longitude.toFixed(5);
         let query = `Enderecos/geo?lat=${encodeURIComponent(lat)}&long=${encodeURIComponent(long)}`;
 
         try {

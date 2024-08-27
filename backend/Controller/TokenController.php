@@ -36,25 +36,13 @@ class TokenController {
             return ['status' => false, 'message' => 'Token inválido! Motivo: ' . $e->getMessage()];
         }
     }
-    public function login($usuarios,$senha,$lembrar) {
-        $condicoes = ['email' => $usuarios->getEmail(),'ativo' => 1];
-        $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
+    public function gerarToken($lembrar=false, $resultado=false){
         $checado=$lembrar? 60*12 : 3;
-        $permissoes=[];
-        $permissoesNomes=[];
-        if (!$resultado) {
-            return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
-        }
-        if (!password_verify($senha, $resultado[0]['senha'])) {
-            return ['status' => false, 'message' => 'Senha incorreta.'];
-        }
-        $twofactor = $resultado[0]['twofactor'];
         $perfil = UsuarioFactory::criarUsuario(
             $resultado[0]['perfil']
         );
-    
+        $permissoes=[];
         $permissoes = $perfil->getPermissoesTela();
-
         $key = TOKEN;
         $local=$_SERVER['HTTP_HOST'];
         $nome=$_SERVER['SERVER_NAME'];
@@ -68,11 +56,24 @@ class TokenController {
                 "sub" => $userid,
                 'telas'=>$permissoes
             ];
-            if($twofactor===1){
-                $this->enviarcodigo($usuarios);
-            }
-            $jwt = JWT::encode($payload, $key,$algoritimo);
-        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'user'=> $userid,'twofactor'=> $twofactor,'telas'=>$permissoesNomes];
+            return  JWT::encode($payload, $key,$algoritimo);
+    }
+    public function login($usuarios,$senha,$lembrar) {
+        $condicoes = ['email' => $usuarios->getEmail(),'ativo' => 1];
+        $resultado = $this->crud->select($usuarios->getTable(), $condicoes);
+        if (!$resultado) {
+            return ['status' => false, 'message' => 'Usuário não encontrado ou bloqueado.'];
+        }
+        if (!password_verify($senha, $resultado[0]['senha'])) {
+            return ['status' => false, 'message' => 'Senha incorreta.'];
+        }
+        $twofactor = $resultado[0]['twofactor'];
+        if($twofactor===1){
+            $this->enviarcodigo($usuarios);
+            return ['status' => true, 'message' => 'E-mail enviado!','token'=>'','twofactor'=> $twofactor,];
+        }
+        $jwt = $this->gerarToken($lembrar, $resultado);
+        return ['status' => true, 'message' => 'Login bem-sucedido!','token'=>$jwt,'twofactor'=> $twofactor,];
     }
     public function enviarcodigo($usuarios){
         $codigo = $this->gerarStringAlfanumerica(6);
