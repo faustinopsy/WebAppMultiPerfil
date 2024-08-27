@@ -73,6 +73,11 @@ function addUsuarioRoutes($router) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
+            $invenciveis = ['admin@gmail.com' , 'comum@gmail.com'];
+            if (in_array($body['email'], $invenciveis )) {
+                echo json_encode(['status' => false, 'message' => 'Não pode trocar o perfil para este usuário']);
+               exit;
+            }
             $usuario = new Usuarios();
             $usuario->setPerfil($body['perf']);
             $usuario->setEmail($body['email']);

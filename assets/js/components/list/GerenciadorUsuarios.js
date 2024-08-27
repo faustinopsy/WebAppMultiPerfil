@@ -120,6 +120,8 @@ export default class GerenciadorUsuarios {
             if (result.status) {
                 Swal.fire("Sucesso!", `${result.status.message}`, "sucess");
                 location.reload();
+            }else {
+                Swal.fire("Alerta!", result.message, "info");
             }
         });
     });
