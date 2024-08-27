@@ -13,7 +13,7 @@ class TokenController {
     private $origesPermitidas;
     public function __construct() {
         $this->ips_permitidos = ['::1', '123.123.123.124'];
-        $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1','https://faustinopsy.com','https://mapadocrime.faustinopsy.com'];
+        $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1','https://faustinopsy.com','mapadocrime.faustinopsy.com'];
         $this->crud = new Crud();
     }
     public function validarToken($usuarios,$token){
@@ -102,7 +102,7 @@ class TokenController {
         $this->Token();
     }
     public function verOrigem(){
-        if(!in_array($_SERVER['HTTP_ORIGIN'], $this->origesPermitidas)){
+        if(!in_array($_SERVER['HTTP_HOST'], $this->origesPermitidas)){
             echo json_encode(['status'=>false,'mensagem' => 'Acesso não autorizado origem'], 403);
             exit;
         }
