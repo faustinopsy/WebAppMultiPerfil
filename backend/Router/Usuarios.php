@@ -84,6 +84,11 @@ function addUsuarioRoutes($router) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
+            $invenciveis = ['admin@gmail.com' , 'comum@gmail.com'];
+            if (in_array($body['email'], $invenciveis )) {
+                echo json_encode(['status' => false, 'message' => 'Não pode trocar a senha']);
+               exit;
+            }
             $novasenha = $body['resenha'];
             $usuario = new Usuarios();
             $usuario->setSenha($novasenha);
@@ -169,6 +174,11 @@ function addUsuarioRoutes($router) {
             $permitido = new TokenController();
             $permitido->autorizado();
             $body = json_decode(file_get_contents('php://input'), true);
+            $invenciveis = ['admin@gmail.com' , 'comum@gmail.com'];
+            if (in_array($body['email'], $invenciveis )) {
+                echo json_encode(['status' => false, 'message' => 'Não pode remover']);
+               exit;
+            }
             $usuario = new Usuarios();
             $usuario->setEmail($body['email']);
             $usuariosController = new UsuarioController($usuario);
