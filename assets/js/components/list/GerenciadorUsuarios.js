@@ -90,7 +90,7 @@ export default class GerenciadorUsuarios {
                     Swal.fire("Sucesso!", "Usuário removido com sucesso!", "sucess");
                     container.remove();
                 } else {
-                    Swal.fire("Alerta!", "Erro ao remover usuário!", "info");
+                    Swal.fire("Alerta!", result.message, "info");
                 }
             });
             container.appendChild(removeBtn);
