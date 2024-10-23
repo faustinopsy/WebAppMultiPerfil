@@ -23,15 +23,15 @@ export default class Navbar {
     
         let lastScrollTop = 0;
     
-        window.addEventListener("scroll", function() {
-            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            if (currentScroll > lastScrollTop) {
-                navbarElement.style.bottom = "-80px"; 
-            } else {
-                navbarElement.style.bottom = "0"; 
-            }
-            lastScrollTop = currentScroll;
-        }, false);
+        // window.addEventListener("scroll", function() {
+        //     let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        //     if (currentScroll > lastScrollTop) {
+        //         navbarElement.style.bottom = "-80px"; 
+        //     } else {
+        //         navbarElement.style.bottom = "0"; 
+        //     }
+        //     lastScrollTop = currentScroll;
+        // }, false);
     }
     updatePermitidas(novasTelasPermitidas) {
         this.telasPermitidas = novasTelasPermitidas;
@@ -42,7 +42,7 @@ export default class Navbar {
         navbarElement.id = 'navbar';
         
         this.menuItems.forEach(item => {
-            //console.log(`Checando item: ${item.text}, permitido: ${this.telasPermitidas.includes(item.text)}`);
+            console.log(`Checando item: ${item.text}, permitido: ${this.telasPermitidas.includes(item.text)}`);
             if (this.telasPermitidas.includes(item.text)) {
                 const linkElement = document.createElement('a');
                 linkElement.href = '#';

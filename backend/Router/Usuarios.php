@@ -89,6 +89,7 @@ function addUsuarioRoutes($router) {
             $usuario->setEmail($body['email']);
             $usuario->setSenha($body['senha']);
             $usuario->setAtivo(1);
+            $usuario->setTwofactor(0);
             $usuariosController = new UsuarioController($usuario);
             $resultado = $usuariosController->adicionarUsuario();
             echo json_encode(['status' => $resultado]);

@@ -48,10 +48,12 @@ class TokenController {
         if (!password_verify($senha, $resultado[0]['senha'])) {
             return ['status' => false, 'message' => 'Senha incorreta.'];
         }
+        
         $perfilperm = $this->crud->select('perfilpermissoes',['perfilid'=>$resultado[0]['perfil']]);
         foreach($perfilperm as $key => $value){
             $permissoes[] = $this->crud->select('permissoes',['id'=>$value['permissao_id']]);
         } 
+       
         foreach ($permissoes as $permissaoArray) {
             foreach ($permissaoArray as $permissao) {
                 if (isset($permissao['nome'])) {

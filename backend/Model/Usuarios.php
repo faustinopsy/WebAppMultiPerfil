@@ -97,7 +97,7 @@ class Usuarios {
         return $this->twofactor;
     }
 
-    public function setTwofactor(int $twofactor): void
+    public function setTwofactor(string $twofactor): void
     {
         $this->twofactor = $twofactor;
     }
