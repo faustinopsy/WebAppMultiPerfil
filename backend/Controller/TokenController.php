@@ -13,7 +13,7 @@ class TokenController {
     private $origesPermitidas;
     public function __construct() {
         $this->ips_permitidos = ['::1', '123.123.123.124'];
-        $this->origesPermitidas= ['http://localhost:5500','http://192.168.56.1','https://faustinopsy.com','mapadocrime.faustinopsy.com'];
+        $this->origesPermitidas= ['localhost:8080','http://localhost:5500','http://192.168.56.1','https://faustinopsy.com','mapadocrime.faustinopsy.com'];
         $this->crud = new Crud();
     }
     public function validarToken($usuarios,$token){
