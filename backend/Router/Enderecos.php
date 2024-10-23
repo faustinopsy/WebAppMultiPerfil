@@ -11,7 +11,7 @@ function addEnderecosRoutes($router) {
         $router->get('/', function () {
             $enderecos = new Enderecos();
             $saloes = new Saloes();
-            $bairro = filter_input(INPUT_GET, 'bairro', FILTER_SANITIZE_STRING);
+            $bairro = $_GET['bairro'];
             $enderecos->setBairro($bairro);
             $EnderecosController = new EnderecosController($enderecos, $saloes);
             $resultado = $EnderecosController->listarEndereco();
@@ -32,6 +32,8 @@ function addEnderecosRoutes($router) {
             $latMax = ($latMin + 0.008009) - 0.02; 
             $longMin = floor($longitude * 100) / 100; 
             $longMax = $longMin + 0.02;
+
+            
             $enderecos->setLatitude($latitude);
             $enderecos->setLongitude($longitude);
             $EnderecosController = new EnderecosController($enderecos, $saloes);

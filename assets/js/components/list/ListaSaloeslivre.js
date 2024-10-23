@@ -19,7 +19,7 @@ export default class ListaSaloes {
         let bairroCodificado = encodeURI(bairro);
         try {
             const data = await this.buscaApi.fetchApi(`Enderecos?bairro=${bairroCodificado}`, 'GET');
-            this.renderSaloes(data);
+            this.renderSaloes(data[0]);
         } catch (error) {
             console.error(error);
         }
